@@ -83,3 +83,12 @@ export interface CalendarEvent {
   startDate: string; // ISO date or date-time
   endDate?: string;
 }
+
+/** A calendar event as stored for the customer, editable in the app. */
+export type CalendarEntry = CalendarEvent & { id: string };
+
+/** A calendar event as the calendar API returns it. */
+export interface CalendarItem extends CalendarEntry {
+  private: boolean; // sensitive (medical, religious): shown to the customer, never analysed
+  moment?: { id: string; type: MomentType }; // the moment this event led to
+}

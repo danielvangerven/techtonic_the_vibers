@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* One accent colour: a deep bank blue. Everything else is neutral. */
+  --color-brand-50: #f0f5fb;
+  --color-brand-100: #dce8f5;
+  --color-brand-200: #b8d0ea;
+  --color-brand-500: #2563a8;
+  --color-brand-600: #1d4f8a;
+  --color-brand-700: #173f6e;
+  --color-brand-900: #0c2340;
+}
+
+@layer base {
+  body {
+    @apply bg-zinc-50 text-zinc-900 antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+}

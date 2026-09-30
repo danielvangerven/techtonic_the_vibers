@@ -2,19 +2,7 @@ import type { Moment, MomentView, Check } from "./types";
 import { getTemplate, type Customer } from "./data";
 import { computePeerStats } from "./peers";
 import { computeRecommendations } from "./recommendations";
-
-const COUNTRY_NAMES: Record<string, string> = {
-  PT: "Portugal",
-  ES: "Spain",
-  IT: "Italy",
-  FR: "France",
-  JP: "Japan",
-  US: "the US",
-  GB: "the UK",
-  CH: "Switzerland",
-  GR: "Greece",
-  IS: "Iceland",
-};
+import { COUNTRY_NAMES } from "./format";
 
 // Checks without a product requirement that a product can still complete (the gift pool sets money aside).
 const DONE_BY_PRODUCT: Record<string, string> = { gift_set_aside: "gift_pool" };

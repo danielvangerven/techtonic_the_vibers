@@ -15,7 +15,7 @@ export function dismissKey(m: MomentKey): string {
   return `${m.type}|${m.startDate}`;
 }
 
-function sameMoment(a: MomentKey, b: MomentKey): boolean {
+export function sameMoment(a: MomentKey, b: MomentKey): boolean {
   return a.type === b.type && Math.abs(daysBetween(a.startDate, b.startDate)) <= SAME_MOMENT_DAYS[a.type];
 }
 

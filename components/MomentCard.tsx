@@ -1,200 +1,272 @@
 "use client";
 
-import React, { useState } from "react";
-import type { MomentView } from "@/lib/types";
-import { SmartAlternativesModal } from "./SmartAlternativesModal";
+import { useState } from "react";
+import type { Check, KbcProductRecommendation, MomentView, PeerStats } from "@/lib/types";
+import { MOMENT_KIND, daysUntil, euro, formatDateRange, formatRelative, momentTitle } from "@/lib/format";
+import {
+  AlertIcon,
+  CalendarIcon,
+  CardIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  CircleIcon,
+  MessageIcon,
+  SpeakerIcon,
+} from "./icons";
 
 interface Props {
   view: MomentView;
-  onRefresh?: () => void;
+  defaultOpen?: boolean;
+  onChanged: () => void;
 }
 
-export default function MomentCard({ view, onRefresh }: Props) {
+export default function MomentCard({ view, defaultOpen = false, onChanged }: Props) {
   const { moment, readiness, checks, peers, recommendations } = view;
-  const [showAlternatives, setShowAlternatives] = useState(false);
-  const [resolving, setResolving] = useState(false);
-  const [playingVoice, setPlayingVoice] = useState(false);
-  const [resolvedStatus, setResolvedStatus] = useState<Record<string, boolean>>({});
+  const [open, setOpen] = useState(defaultOpen);
+  const [busy, setBusy] = useState<string | null>(null);
 
-  const handleResolveGap = async (e: React.MouseEvent, productId?: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!productId) return;
+  const title = momentTitle(moment);
+  const days = daysUntil(moment.startDate);
+  const nights = moment.attrs.nights;
+  const ready = readiness.done === readiness.total;
 
-    setResolving(true);
+  async function activate(productId: string) {
+    setBusy(productId);
+    await fetch(`/api/moments/${moment.id}/resolve`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productId }),
+    });
+    setBusy(null);
+    onChanged();
+  }
+
+  async function remove() {
+    setBusy("remove");
+    await fetch(`/api/moments/${moment.id}`, { method: "DELETE" });
+    onChanged();
+  }
+
+  async function listen() {
+    setBusy("voice");
+    const gaps = checks.filter((c) => c.status !== "ok").map((c) => c.label.toLowerCase());
+    const text =
+      `${title}, ${formatRelative(days)}. You're ${readiness.done} of ${readiness.total} ready.` +
+      (gaps.length ? ` Still open: ${gaps.join(", ")}.` : "") +
+      (peers.ok ? ` People like you spent around ${peers.median} euros.` : "");
     try {
-      const res = await fetch(`/api/moments/${moment.id}/resolve`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId }),
-      });
-      if (res.ok) {
-        setResolvedStatus((prev) => ({ ...prev, [productId]: true }));
-        if (onRefresh) onRefresh();
-      }
-    } catch (err) {
-      console.error("Failed to resolve gap", err);
-    } finally {
-      setResolving(false);
-    }
-  };
-
-  const handlePlayVoice = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setPlayingVoice(true);
-    try {
-      const text = `Hello! For your upcoming ${moment.type === "trip_abroad" ? "trip abroad" : moment.type}, we've prepared your KBC checklist. ${
-        peers.ok ? `Customers like you spend around €${peers.median}.` : ""
-      }`;
       const res = await fetch("/api/voice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
-      if (res.ok) {
-        const contentType = res.headers.get("Content-Type");
-        if (contentType && contentType.includes("audio")) {
-          const blob = await res.blob();
-          const audio = new Audio(URL.createObjectURL(blob));
-          audio.play();
-        } else {
-          // Fallback to browser speech synthesis
-          const utterance = new SpeechSynthesisUtterance(text);
-          window.speechSynthesis.speak(utterance);
-        }
+      if (res.headers.get("Content-Type")?.includes("audio")) {
+        await new Audio(URL.createObjectURL(await res.blob())).play();
+      } else {
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
       }
-    } catch (err) {
-      console.error("Voice playback error", err);
     } finally {
-      setPlayingVoice(false);
+      setBusy(null);
     }
-  };
-
-  const isReady = readiness.done === readiness.total;
+  }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm hover:shadow-md transition-all duration-200">
-      {/* Top Bar: Title & Readiness Badge */}
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <h3 className="font-bold text-slate-900 text-base">
-              {moment.type === "trip_abroad" && "✈️ "}
-              {moment.type === "moving" && "🏡 "}
-              {moment.type === "wedding_guest" && "🎉 "}
-              {moment.sources[0]?.label.replace("Calendar: ", "").replace(/'/g, "") || moment.type}
-            </h3>
-          </div>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">
-            Starts {moment.startDate} {moment.endDate ? `· ${moment.attrs.nights || 7} nights` : ""}
+    <article className="rounded-xl border border-zinc-200 bg-white">
+      <button
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-6 px-5 py-4 text-left"
+      >
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-medium text-zinc-500">{MOMENT_KIND[moment.type]}</p>
+          <h3 className="mt-0.5 truncate text-base font-semibold text-zinc-900">{title}</h3>
+          <p className="mt-0.5 text-sm text-zinc-500">
+            {formatDateRange(moment.startDate, moment.endDate)}
+            {nights ? ` · ${nights} nights` : ""} · {formatRelative(days)}
           </p>
         </div>
+        <Readiness done={readiness.done} total={readiness.total} ready={ready} />
+        <ChevronDownIcon className={`size-4 shrink-0 text-zinc-400 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
 
-        <span
-          className={`px-2.5 py-1 rounded-full text-xs font-bold tracking-tight shrink-0 ${
-            isReady
-              ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
-              : "bg-amber-100 text-amber-800 border border-amber-200"
-          }`}
-        >
-          {isReady ? "100% Ready ✓" : `${readiness.done}/${readiness.total} ready`}
-        </span>
-      </div>
+      {open && (
+        <div className="border-t border-zinc-100 px-5 pb-5 pt-4">
+          <div className="grid gap-8 md:grid-cols-[1fr_16rem]">
+            <section>
+              <h4 className="text-xs font-medium uppercase tracking-wide text-zinc-500">Checklist</h4>
+              <ul className="mt-2 divide-y divide-zinc-100">
+                {checks.map((check) => (
+                  <CheckRow key={check.id} check={check} busy={busy} onActivate={activate} />
+                ))}
+              </ul>
+            </section>
+            <aside className="space-y-6">
+              <PeerSummary peers={peers} type={moment.type} />
+              <section>
+                <h4 className="text-xs font-medium uppercase tracking-wide text-zinc-500">How we know</h4>
+                <ul className="mt-2 space-y-1.5 text-sm text-zinc-600">
+                  {moment.sources.map((s) => (
+                    <li key={s.kind + s.label} className="flex items-start gap-2">
+                      {s.kind === "calendar" && <CalendarIcon className="mt-0.5 size-4 shrink-0 text-zinc-400" />}
+                      {s.kind === "transaction" && <CardIcon className="mt-0.5 size-4 shrink-0 text-zinc-400" />}
+                      {s.kind === "told_us" && <MessageIcon className="mt-0.5 size-4 shrink-0 text-zinc-400" />}
+                      <span>{s.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </aside>
+          </div>
 
-      {/* Dual-Signal Source Badges */}
-      <div className="mt-2.5 flex flex-wrap gap-1.5">
-        {moment.sources.map((src, i) => (
-          <span
-            key={i}
-            className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200/60"
-          >
-            {src.kind === "calendar" && "📅 "}
-            {src.kind === "transaction" && "💳 "}
-            {src.kind === "told_us" && "🗣️ "}
-            {src.label}
-          </span>
+          {recommendations && (recommendations.bestProduct || recommendations.alternatives.length > 0) && (
+            <section className="mt-6 border-t border-zinc-100 pt-5">
+              <h4 className="text-xs font-medium uppercase tracking-wide text-zinc-500">Suggested for this moment</h4>
+              <div className="mt-3 space-y-3">
+                {[recommendations.bestProduct, recommendations.secondaryProduct]
+                  .filter((p): p is KbcProductRecommendation => !!p)
+                  .map((p, i) => (
+                    <ProductRow key={p.productId} product={p} primary={i === 0} busy={busy} onActivate={activate} />
+                  ))}
+              </div>
+              {recommendations.alternatives.length > 0 && (
+                <ul className="mt-4 space-y-3">
+                  {recommendations.alternatives.map((alt) => (
+                    <li key={alt.id} className="text-sm">
+                      <p className="font-medium text-zinc-900">
+                        {alt.title}
+                        {alt.estimatedSavings && <span className="ml-2 font-normal text-emerald-700">{alt.estimatedSavings}</span>}
+                      </p>
+                      <p className="mt-0.5 text-zinc-600">{alt.description}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
+
+          <footer className="mt-6 flex items-center gap-5 border-t border-zinc-100 pt-4 text-sm">
+            <button
+              onClick={listen}
+              disabled={busy === "voice"}
+              className="inline-flex items-center gap-1.5 text-zinc-600 hover:text-zinc-900 disabled:opacity-50"
+            >
+              <SpeakerIcon className="size-4" />
+              {busy === "voice" ? "Playing…" : "Listen to briefing"}
+            </button>
+            <button onClick={remove} disabled={busy === "remove"} className="ml-auto text-zinc-500 hover:text-red-700">
+              Not relevant, remove
+            </button>
+          </footer>
+        </div>
+      )}
+    </article>
+  );
+}
+
+function Readiness({ done, total, ready }: { done: number; total: number; ready: boolean }) {
+  return (
+    <div className="hidden w-28 shrink-0 sm:block">
+      <p className={`text-right text-sm ${ready ? "text-emerald-700" : "text-zinc-700"}`}>
+        {ready ? "Ready" : `${done} of ${total} ready`}
+      </p>
+      <div className="mt-1.5 flex gap-1">
+        {Array.from({ length: total }, (_, i) => (
+          <span key={i} className={`h-1 flex-1 rounded-full ${i < done ? (ready ? "bg-emerald-600" : "bg-brand-600") : "bg-zinc-200"}`} />
         ))}
       </div>
+    </div>
+  );
+}
 
-      {/* Peer Statistics & Crowd Hindsight */}
-      {peers.ok && (
-        <div className="mt-3 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 space-y-1">
-          <div className="flex items-center justify-between font-semibold text-slate-800">
-            <span>📊 Typical peer spend:</span>
-            <span className="text-blue-700 font-bold">€{peers.median} median</span>
-          </div>
-          <p className="text-[11px] text-slate-500">
-            Range: €{peers.p20} – €{peers.p80} (based on {peers.n} {peers.cohortLabel})
-          </p>
-        </div>
-      )}
-
-      {/* Checklist & Gaps */}
-      <div className="mt-3.5 space-y-2">
-        {checks.map((chk) => {
-          const isGap = chk.status === "gap" && !resolvedStatus[chk.action?.productId || ""];
-          return (
-            <div
-              key={chk.id}
-              className={`p-2.5 rounded-xl border text-xs flex items-center justify-between gap-2 transition ${
-                isGap
-                  ? "bg-amber-50/80 border-amber-200 text-amber-900"
-                  : "bg-slate-50/50 border-slate-100 text-slate-700"
-              }`}
-            >
-              <div className="flex items-center gap-2 min-w-0">
-                <span className={`font-bold ${isGap ? "text-amber-600" : "text-emerald-600"}`}>
-                  {isGap ? "⚠️" : "✓"}
-                </span>
-                <span className="font-medium truncate">{chk.label}</span>
-                {chk.peerMissedPct && isGap && (
-                  <span className="text-[10px] bg-amber-200/70 text-amber-900 font-semibold px-1.5 py-0.5 rounded">
-                    {chk.peerMissedPct}% forgot
-                  </span>
-                )}
-              </div>
-
-              {isGap && chk.action && (
-                <button
-                  onClick={(e) => handleResolveGap(e, chk.action?.productId)}
-                  disabled={resolving}
-                  className="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] rounded-lg shadow-xs transition shrink-0 active:scale-95"
-                >
-                  {resolving ? "Adding..." : chk.action.label}
-                </button>
-              )}
-            </div>
-          );
-        })}
+function CheckRow({ check, busy, onActivate }: { check: Check; busy: string | null; onActivate: (id: string) => void }) {
+  return (
+    <li className="flex items-start gap-3 py-2.5">
+      {check.status === "ok" && <CheckIcon className="mt-0.5 size-4 shrink-0 text-emerald-600" />}
+      {check.status === "gap" && <AlertIcon className="mt-0.5 size-4 shrink-0 text-amber-600" />}
+      {check.status === "todo" && <CircleIcon className="mt-0.5 size-4 shrink-0 text-zinc-300" />}
+      <div className="min-w-0 flex-1">
+        <p className={`text-sm ${check.status === "ok" ? "text-zinc-600" : "text-zinc-900"}`}>{check.label}</p>
+        {check.status !== "ok" && check.peerMissedPct ? (
+          <p className="mt-0.5 text-xs text-zinc-500">{check.peerMissedPct}% of people like you forgot this</p>
+        ) : null}
       </div>
-
-      {/* Bottom Bar: Kate Voice & Smart Alternatives Toggle */}
-      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+      {check.status !== "ok" && check.action && (
         <button
-          onClick={handlePlayVoice}
-          disabled={playingVoice}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 transition"
+          onClick={() => onActivate(check.action!.productId)}
+          disabled={busy !== null}
+          className="shrink-0 rounded-md border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-800 hover:border-zinc-400 hover:bg-zinc-50 disabled:opacity-50"
         >
-          <span>{playingVoice ? "🔊" : "🎙️"}</span>
-          <span>{playingVoice ? "Playing Kate..." : "Listen to Kate"}</span>
+          {busy === check.action.productId ? "Adding…" : check.action.label}
         </button>
-
-        <button
-          onClick={() => setShowAlternatives(!showAlternatives)}
-          className="text-xs font-bold text-blue-600 hover:text-blue-800 transition"
-        >
-          {showAlternatives ? "Hide Alternatives ↑" : "💡 KBC Deals & Alternatives ↓"}
-        </button>
-      </div>
-
-      {/* Expandable Smart Alternatives & KBC Products */}
-      {showAlternatives && recommendations && (
-        <SmartAlternativesModal
-          recommendations={recommendations}
-          onActivateProduct={(pid) => handleResolveGap({ preventDefault: () => {}, stopPropagation: () => {} } as any, pid)}
-        />
       )}
+    </li>
+  );
+}
+
+function PeerSummary({ peers, type }: { peers: PeerStats; type: MomentView["moment"]["type"] }) {
+  const what = type === "trip_abroad" ? "spent on a trip like this" : type === "moving" ? "spent extra in the first 3 months" : "gave as a gift";
+  if (!peers.ok) {
+    return (
+      <section>
+        <h4 className="text-xs font-medium uppercase tracking-wide text-zinc-500">People like you</h4>
+        <p className="mt-2 text-sm text-zinc-600">Not enough similar customers to compare privately.</p>
+      </section>
+    );
+  }
+  // Scale the bar so the 20th–80th percentile band sits in the middle.
+  const min = peers.p20 * 0.6;
+  const max = peers.p80 * 1.3;
+  const pos = (v: number) => `${((v - min) / (max - min)) * 100}%`;
+  return (
+    <section>
+      <h4 className="text-xs font-medium uppercase tracking-wide text-zinc-500">People like you</h4>
+      <p className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900">{euro(peers.median)}</p>
+      <p className="text-sm text-zinc-600">typically {what}</p>
+      <div className="relative mt-3 h-1.5 rounded-full bg-zinc-100">
+        <div className="absolute inset-y-0 rounded-full bg-brand-200" style={{ left: pos(peers.p20), right: `calc(100% - ${pos(peers.p80)})` }} />
+        <div className="absolute -top-1 h-3.5 w-0.5 rounded bg-brand-700" style={{ left: pos(peers.median) }} />
+      </div>
+      <div className="mt-1.5 flex justify-between text-xs text-zinc-500">
+        <span>{euro(peers.p20)}</span>
+        <span>{euro(peers.p80)}</span>
+      </div>
+      <p className="mt-2 text-xs text-zinc-500">
+        Middle 60% of {peers.n} {peers.cohortLabel}
+        {peers.unexpectedMedian ? `. Unexpected costs: about ${euro(peers.unexpectedMedian)}.` : "."}
+      </p>
+    </section>
+  );
+}
+
+function ProductRow({
+  product,
+  primary,
+  busy,
+  onActivate,
+}: {
+  product: KbcProductRecommendation;
+  primary: boolean;
+  busy: string | null;
+  onActivate: (id: string) => void;
+}) {
+  return (
+    <div className={`flex items-start gap-4 rounded-lg p-4 ${primary ? "bg-brand-50" : "border border-zinc-200"}`}>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium text-zinc-900">
+          {product.name}
+          {product.priceOrRate && <span className="ml-2 font-normal text-zinc-500">{product.priceOrRate}</span>}
+        </p>
+        <p className="mt-0.5 text-sm text-zinc-600">{product.reason}</p>
+      </div>
+      <button
+        onClick={() => onActivate(product.productId)}
+        disabled={busy !== null}
+        className={`shrink-0 rounded-md px-3 py-1.5 text-sm font-medium disabled:opacity-50 ${
+          primary ? "bg-brand-600 text-white hover:bg-brand-700" : "border border-zinc-300 text-zinc-800 hover:bg-zinc-50"
+        }`}
+      >
+        {busy === product.productId ? "Activating…" : "Activate"}
+      </button>
     </div>
   );
 }
