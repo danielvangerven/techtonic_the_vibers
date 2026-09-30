@@ -1,31 +1,13 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/session";
-import { getPersonas } from "@/lib/data";
-import { getMomentsForCustomer } from "@/lib/store";
+import { authenticate, unauthorized } from "@/lib/api";
+import { getMoments } from "@/lib/store";
 import { buildMomentView } from "@/lib/engine";
 
+/** MomentView[] for the logged-in customer, soonest first. */
 export async function GET() {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await authenticate();
+  if (!auth) return unauthorized();
 
-  const personas = getPersonas();
-  const customer = personas.find((p) => p.id === session.customerId) || {
-    id: session.customerId,
-    name: session.name,
-    age: 29,
-    ageBand: "18-29" as const,
-    household: "single" as const,
-    region: "Flanders",
-    city: "Ghent",
-    passwordHash: "",
-    products: { cancellation_cover: true, travel_medical: false, home_insurance: true, hospitalisation: true, pension_savings: true },
-    transactions: [],
-  };
-
-  const moments = getMomentsForCustomer(session.customerId);
-  const timeline = moments.map((m) => buildMomentView(customer, m));
-
-  return NextResponse.json(timeline);
+  const moments = await getMoments(auth.customerId);
+  return NextResponse.json(moments.map((m) => buildMomentView(auth.customer, m)));
 }

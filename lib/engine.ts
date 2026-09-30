@@ -1,82 +1,70 @@
 import type { Moment, MomentView, Check } from "./types";
-import { getTemplate, Persona, Customer } from "./data";
+import { getTemplate, type Customer } from "./data";
 import { computePeerStats } from "./peers";
 import { computeRecommendations } from "./recommendations";
 
-export function buildMomentView(
-  customer: Persona | Customer,
-  moment: Moment
-): MomentView {
-  const template = getTemplate(moment.type);
-  const { peers, forgotPcts } = computePeerStats(customer, moment);
-  const recommendations = computeRecommendations(customer, moment);
+const COUNTRY_NAMES: Record<string, string> = {
+  PT: "Portugal",
+  ES: "Spain",
+  IT: "Italy",
+  FR: "France",
+  JP: "Japan",
+  US: "the US",
+  GB: "the UK",
+  CH: "Switzerland",
+  GR: "Greece",
+  IS: "Iceland",
+};
 
-  const checks: Check[] = [];
-  let doneCount = 0;
+// Checks without a product requirement that a product can still complete (the gift pool sets money aside).
+const DONE_BY_PRODUCT: Record<string, string> = { gift_set_aside: "gift_pool" };
 
-  if (template && template.checks) {
-    for (const ch of template.checks) {
-      let status: "ok" | "gap" | "todo" = "ok";
-      let action = ch.action;
+interface TemplateCheck {
+  id: string;
+  label: string;
+  productRequirement: string | null;
+  peerKey?: string;
+  action?: Check["action"];
+}
 
-      if (ch.productRequirement) {
-        const hasProduct = customer.products && customer.products[ch.productRequirement];
-        if (hasProduct) {
-          status = "ok";
-          action = undefined; // No product button if already owned
-        } else {
-          status = "gap";
-        }
-      } else {
-        // Deterministic heuristic checks
-        if (moment.type === "wedding_guest") {
-          status = "todo";
-        } else if (moment.type === "moving") {
-          if (ch.id === "address_change" || ch.id === "energy_contract") {
-            status = "todo";
-          } else {
-            status = "ok";
-          }
-        } else {
-          status = "ok";
-        }
-      }
-
-      if (status === "ok") {
-        doneCount++;
-      }
-
-      const peerMissed = ch.peerKey ? forgotPcts[ch.peerKey] : undefined;
-
-      let label = ch.label;
-      if (moment.attrs.country && label.includes("{countryName}")) {
-        const countryNames: Record<string, string> = {
-          PT: "Portugal",
-          ES: "Spain",
-          IT: "Italy",
-          FR: "France",
-          JP: "Japan",
-          US: "the US",
-          GB: "the UK",
-          IS: "Iceland",
-        };
-        label = label.replace("{countryName}", countryNames[moment.attrs.country] || moment.attrs.country);
-      }
-
-      checks.push({
-        id: ch.id,
-        label,
-        status,
-        peerMissedPct: peerMissed,
-        action,
-      });
+function checkStatus(ch: TemplateCheck, customer: Customer, moment: Moment): Check["status"] {
+  if (ch.productRequirement) return customer.products[ch.productRequirement] ? "ok" : "gap";
+  const doneBy = DONE_BY_PRODUCT[ch.id];
+  if (doneBy && customer.products[doneBy]) return "ok";
+  if (moment.type === "wedding_guest") return "todo";
+  if (moment.type === "moving") {
+    if (ch.id === "rental_deposit") {
+      return moment.sources.some((s) => s.label.startsWith("Rental deposit")) ? "ok" : "todo";
     }
+    return ch.id === "address_change" || ch.id === "energy_contract" ? "todo" : "ok";
   }
+  return "ok";
+}
 
-  const total = checks.length;
+export function buildMomentView(customer: Customer, moment: Moment): MomentView {
+  const template = getTemplate(moment.type) as { checks?: TemplateCheck[] } | null;
+  const { peers, forgotPcts } = computePeerStats(customer, moment);
+  const recommendations = computeRecommendations(customer, moment, peers);
+
+  const checks: Check[] = (template?.checks ?? [])
+    // A rental deposit is irrelevant when buying.
+    .filter((ch) => !(ch.id === "rental_deposit" && moment.attrs.housing === "buy"))
+    .map((ch) => {
+      const status = checkStatus(ch, customer, moment);
+      const country = moment.attrs.country;
+      return {
+        id: ch.id,
+        label: ch.label.replace("{countryName}", country ? COUNTRY_NAMES[country] ?? country : "your destination"),
+        status,
+        peerMissedPct: ch.peerKey ? forgotPcts[ch.peerKey] : undefined,
+        // No product button once the customer holds it.
+        action: status === "ok" ? undefined : ch.action,
+      };
+    });
+
   return {
     moment,
-    readiness: { done: doneCount, total },
+    readiness: { done: checks.filter((c) => c.status === "ok").length, total: checks.length },
     checks,
     peers,
     recommendations,

@@ -1,44 +1,32 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/session";
-import { getPersonas } from "@/lib/data";
-import { getMomentsForCustomer } from "@/lib/store";
+import { z } from "zod";
+import { authenticate, jsonError, notFound, readJson, unauthorized } from "@/lib/api";
+import { activateProduct, getCustomer, getMoment } from "@/lib/store";
 import { buildMomentView } from "@/lib/engine";
+import { PRODUCT_IDS, PRODUCTS } from "@/lib/products";
 
-export async function POST(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+const Body = z.object({ productId: z.enum(PRODUCT_IDS) });
 
-  const { id } = await params;
-  const body = await req.json();
-  const { productId } = body;
+type Params = { params: Promise<{ id: string }> };
 
-  const personas = getPersonas();
-  const customer = personas.find((p) => p.id === session.customerId);
+/** Activate a product or deal for a moment: { productId } → the updated MomentView. */
+export async function POST(req: Request, { params }: Params) {
+  const auth = await authenticate();
+  if (!auth) return unauthorized();
 
-  if (customer && productId) {
-    // Activate the product for this customer session
-    customer.products[productId] = true;
-    if (productId === "travel_medical") {
-      customer.products["travel_medical"] = true;
-    }
-  }
+  const moment = await getMoment(auth.customerId, (await params).id);
+  if (!moment) return notFound();
 
-  const moments = getMomentsForCustomer(session.customerId);
-  const targetMoment = moments.find((m) => m.id === id);
+  const parsed = Body.safeParse(await readJson(req));
+  if (!parsed.success) return jsonError("Unknown product", 400);
+  const { productId } = parsed.data;
 
-  if (!targetMoment) {
-    return NextResponse.json({ error: "Moment not found" }, { status: 404 });
-  }
-
-  const updatedView = buildMomentView(customer || ({} as any), targetMoment);
+  await activateProduct(auth.customerId, productId);
+  const customer = (await getCustomer(auth.customerId))!;
+  const momentView = buildMomentView(customer, moment);
   return NextResponse.json({
     ok: true,
-    message: `Activated ${productId}. Readiness is now ${updatedView.readiness.done}/${updatedView.readiness.total}.`,
-    momentView: updatedView,
+    message: `Activated ${PRODUCTS[productId].name}. Readiness is now ${momentView.readiness.done}/${momentView.readiness.total}.`,
+    momentView,
   });
 }

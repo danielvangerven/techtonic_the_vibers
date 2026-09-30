@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getSession } from "@/lib/session";
+import { authenticate, jsonError, readJson, unauthorized } from "@/lib/api";
 import { addDetectedMoments } from "@/lib/store";
 import { buildMomentView } from "@/lib/engine";
-import { getPersonas, type Customer } from "@/lib/data";
 import { detectFromCalendar, todayIso } from "@/lib/detect";
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}/;
@@ -21,35 +20,24 @@ const Body = z.object({
     .max(50),
 });
 
+/** Upload extra calendar events (already filtered in the browser) → the moments that are new or changed. */
 export async function POST(req: Request) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await authenticate();
+  if (!auth) return unauthorized();
 
-  const parsed = Body.safeParse(await req.json().catch(() => null));
+  const parsed = Body.safeParse(await readJson(req));
   if (!parsed.success) {
-    return NextResponse.json({ error: "Send up to 50 events with a title (max 120 chars) and ISO dates" }, { status: 400 });
+    return jsonError("Send up to 50 events with a title (max 120 chars) and ISO dates", 400);
   }
 
   try {
     // Titles are used for classification only; they are not stored or logged.
     const detected = await detectFromCalendar(parsed.data.events, todayIso());
-    const changed = addDetectedMoments(session.customerId, detected);
-
-    const fallback: Customer = {
-      id: session.customerId,
-      household: "single",
-      ageBand: "18-29",
-      region: "Flanders",
-      city: "Ghent",
-      products: {},
-    };
-    const customer = getPersonas().find((p) => p.id === session.customerId) ?? fallback;
-    const moments = changed.map((m) => buildMomentView(customer, m));
+    const changed = await addDetectedMoments(auth.customerId, detected);
+    const moments = changed.map((m) => buildMomentView(auth.customer, m));
     return NextResponse.json({ ok: true, imported: moments.length, moments });
   } catch (err) {
     console.error("calendar import failed", err instanceof Error ? err.name : "unknown error");
-    return NextResponse.json({ error: "Calendar import failed" }, { status: 500 });
+    return jsonError("Calendar import failed", 500);
   }
 }

@@ -7,12 +7,21 @@ import { addSources } from "./merge";
 
 const LOOKBACK_DAYS = 120;
 const MIN_DEPOSIT = 500;
-const TRIP_WINDOW_DAYS = 120;
+const TRIP_WINDOW_DAYS = 120; // a payment without a destination attaches to the next trip within this window
+const MATCHED_TRIP_WINDOW_DAYS = 365; // a payment whose destination matches the trip
 
 const DEPOSIT = /\b(huurwaarborg|waarborg|huurgarantie|rental deposit|garantie locative)\b/;
 const REMOVAL = /\b(verhui[sz]\w*|removals?|movers|demenag\w*)\b/;
+const NOTARY = /\b(notari\w*|notary|notaire|aankoopakte|acte d achat)\b/;
 const TRAVEL =
-  /\b(tap air portugal|tap portugal|brussels airlines|ryanair|klm|lufthansa|easyjet|vueling|transavia|air france|tui|booking com|airbnb|expedia|hotels?)\b/;
+  /\b(tap air portugal|tap portugal|brussels airlines|ryanair|klm|lufthansa|easyjet|vueling|transavia|air france|all nippon airways|japan airlines|swiss international|tui|eurostar|thalys|jungfrau\w*|booking com|airbnb|expedia|hotels?)\b/;
+// Carriers whose name gives away the destination.
+const CARRIER_COUNTRY: [RegExp, string][] = [
+  [/\ball nippon airways|japan airlines\b/, "JP"],
+  [/\btap (?:air )?portugal\b/, "PT"],
+  [/\beurostar\b/, "GB"],
+  [/\bswiss international\b/, "CH"],
+];
 
 type Payment = Transaction & { day: string; text: string };
 
@@ -27,9 +36,11 @@ function recentPayments(txs: Transaction[], today: string): Payment[] {
     .sort((a, b) => a.day.localeCompare(b.day));
 }
 
-const isDeposit = (p: Payment) =>
-  (p.type === "rental_deposit" || DEPOSIT.test(p.text)) && Math.abs(p.amount) >= MIN_DEPOSIT;
-const isRemoval = (p: Payment) => !isDeposit(p) && (p.type === "removal_firm" || REMOVAL.test(p.text));
+const bigEnough = (p: Payment) => Math.abs(p.amount) >= MIN_DEPOSIT;
+const isDeposit = (p: Payment) => (p.type === "rental_deposit" || DEPOSIT.test(p.text)) && bigEnough(p);
+const isNotary = (p: Payment) => (p.type === "notary_deposit" || NOTARY.test(p.text)) && bigEnough(p);
+const isRemoval = (p: Payment) =>
+  !isDeposit(p) && !isNotary(p) && (p.type === "removal_firm" || REMOVAL.test(p.text));
 
 /** A date in the payment message ("Verhuis 01/12" or "01/12/2026"), on or after the payment day. */
 function dateInMessage(message: string | undefined, paidOn: string): string | null {
@@ -43,53 +54,70 @@ function dateInMessage(message: string | undefined, paidOn: string): string | nu
 }
 
 const euros = (amount: number) => `€${Math.round(Math.abs(amount)).toLocaleString("en-GB")}`;
+const merchant = (p: Payment) => p.merchant.slice(0, 40);
 
 /**
- * Moving house from a rental deposit and/or a removal-firm payment. Move date: from the removal
- * payment's message, else the first of the month after the payment. Airline and hotel payments
- * never create a trip on their own (no destination or date); see attachTripPayments.
+ * Moving house from a rental deposit, a notary deposit (buying) and/or a removal-firm payment.
+ * Date: from a payment message ("verlijden 18/10/2026"), else the first of the next month.
+ * Airline and hotel payments never create a trip on their own (no reliable dates); see attachTripPayments.
  */
 export function detectFromTransactions(txs: Transaction[], today: string): Moment[] {
   const payments = recentPayments(txs, today);
   const deposit = payments.filter(isDeposit).at(-1);
+  const notary = payments.filter(isNotary).at(-1);
   const removal = payments.filter(isRemoval).at(-1);
-  const first = deposit ?? removal;
-  if (!first) return [];
+  const signals = [notary, deposit, removal].filter((p): p is Payment => !!p);
+  if (signals.length === 0) return [];
 
-  const startDate = (removal && dateInMessage(removal.description, removal.day)) ?? firstOfNextMonth(first.day);
-  if (startDate < today) return []; // already moved
+  const dated = signals.map((p) => dateInMessage(p.description, p.day)).find((d) => d);
+  const startDate = dated ?? firstOfNextMonth(signals[0].day);
+  if (!startDate || startDate < today) return []; // already moved
 
   const sources: Moment["sources"] = [];
-  if (deposit) {
-    sources.push({ kind: "transaction", label: `Rental deposit (${euros(deposit.amount)}) on ${shortLabel(deposit.day)}` });
-  }
-  if (removal) {
-    sources.push({ kind: "transaction", label: `${removal.merchant.slice(0, 40)} booking on ${shortLabel(removal.day)}` });
-  }
+  if (notary) sources.push({ kind: "transaction", label: `Notary deposit (${euros(notary.amount)}) on ${shortLabel(notary.day)}` });
+  if (deposit) sources.push({ kind: "transaction", label: `Rental deposit (${euros(deposit.amount)}) on ${shortLabel(deposit.day)}` });
+  if (removal) sources.push({ kind: "transaction", label: `${merchant(removal)} booking on ${shortLabel(removal.day)}` });
 
-  const place = findPlace([deposit, removal].map((p) => (p ? `${p.merchant} ${p.description ?? ""}` : "")).join(" "));
+  const attrs: Moment["attrs"] = { housing: notary ? "buy" : "rent" };
+  const place = findPlace(signals.map((p) => `${p.merchant} ${p.description ?? ""}`).join(" "));
+  if (place?.city) attrs.city = place.city;
+
   return [
     {
       id: randomUUID(),
       type: "moving",
       startDate,
-      attrs: place?.city ? { city: place.city } : {},
+      attrs,
       sources,
-      confidence: deposit && removal ? 0.9 : 0.6,
+      confidence: signals.length > 1 ? 0.9 : 0.6,
     },
   ];
 }
 
-/** Adds each airline or hotel payment as a source of the first trip starting within 120 days after it. */
+/** The destination a payment gives away: a place in its text, or the carrier. */
+function paymentCountry(p: Payment): string | undefined {
+  const place = findPlace(`${p.merchant} ${p.description ?? ""}`);
+  if (place && place.country !== "BE") return place.country;
+  return CARRIER_COUNTRY.find(([pattern]) => pattern.test(p.text))?.[1];
+}
+
+/**
+ * Adds each airline, rail or hotel payment as a source of the trip it belongs to: the trip to the
+ * payment's country if known, else the first trip starting within 120 days after the payment.
+ */
 export function attachTripPayments(moments: Moment[], txs: Transaction[], today: string): Moment[] {
   const trips = moments
     .filter((m) => m.type === "trip_abroad")
     .sort((a, b) => a.startDate.localeCompare(b.startDate));
   const extra = new Map<string, Moment["sources"]>();
   for (const p of recentPayments(txs, today).filter((p) => TRAVEL.test(p.text))) {
-    const trip = trips.find((t) => t.startDate >= p.day && daysBetween(p.day, t.startDate) <= TRIP_WINDOW_DAYS);
+    const after = (t: Moment, days: number) => t.startDate >= p.day && daysBetween(p.day, t.startDate) <= days;
+    const country = paymentCountry(p);
+    const trip = country
+      ? trips.find((t) => t.attrs.country === country && after(t, MATCHED_TRIP_WINDOW_DAYS))
+      : trips.find((t) => after(t, TRIP_WINDOW_DAYS));
     if (!trip) continue;
-    const label = `${p.merchant.slice(0, 40)} payment on ${shortLabel(p.day)}`;
+    const label = `${merchant(p)} (${euros(p.amount)}) on ${shortLabel(p.day)}`;
     extra.set(trip.id, [...(extra.get(trip.id) ?? []), { kind: "transaction", label }]);
   }
   return moments.map((m) => (extra.has(m.id) ? addSources(m, extra.get(m.id)!) : m));

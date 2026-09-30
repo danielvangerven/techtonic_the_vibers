@@ -1,55 +1,95 @@
+// Owner: B (Backend + AI). In-memory state per customer for the demo: their moments (detected
+// from their calendar and transactions on first access), the moments they removed, and the
+// products they activated in the app. Every function takes the customer ID from the session.
 import type { Moment } from "./types";
-import { getPersonas } from "./data";
-import { attachTripPayments, detectFromTransactions, dismissKey, mergeMoments, todayIso } from "./detect";
+import { findPersona, type Persona } from "./data";
+import {
+  attachTripPayments,
+  detectFromCalendar,
+  detectFromTransactions,
+  dismissKey,
+  mergeMoments,
+  todayIso,
+} from "./detect";
+import { withProduct } from "./products";
 
-// In-memory moments per customerId for the demo. On first access they are detected from the
-// customer's transactions (Tom's move); calendar imports and Tell KBC add to them.
-const store: Record<string, Moment[]> = {};
-// Moments the customer removed ("that's wrong"), so detection never brings them back.
-const dismissed: Record<string, Set<string>> = {};
-
-function dismissedFor(customerId: string): Set<string> {
-  return (dismissed[customerId] ??= new Set());
+interface CustomerState {
+  moments: Moment[];
+  dismissed: Set<string>; // "that's wrong": detection never brings these back
+  activated: Record<string, boolean>; // products activated during the demo
 }
 
-function transactionsOf(customerId: string) {
-  return getPersonas().find((p) => p.id === customerId)?.transactions ?? [];
+// Kept on globalThis so the state survives dev hot reloads.
+const globals = globalThis as { __kbcStore?: Map<string, Promise<CustomerState>> };
+const states = (globals.__kbcStore ??= new Map());
+
+async function detectAll(persona: Persona, dismissed: Set<string>): Promise<Moment[]> {
+  const today = todayIso();
+  const fromCalendar = await detectFromCalendar(persona.calendar ?? [], today);
+  const fromTransactions = detectFromTransactions(persona.transactions ?? [], today);
+  const merged = mergeMoments(mergeMoments([], fromCalendar, dismissed), fromTransactions, dismissed);
+  return attachTripPayments(merged, persona.transactions ?? [], today);
 }
 
-function ensureLoaded(customerId: string): Moment[] {
-  if (!store[customerId]) {
-    const today = todayIso();
-    const txs = transactionsOf(customerId);
-    const detected = mergeMoments([], detectFromTransactions(txs, today), dismissedFor(customerId));
-    store[customerId] = attachTripPayments(detected, txs, today);
+function customerState(customerId: string): Promise<CustomerState> {
+  let state = states.get(customerId);
+  if (!state) {
+    state = (async () => {
+      const persona = findPersona(customerId);
+      const dismissed = new Set<string>();
+      return { moments: persona ? await detectAll(persona, dismissed) : [], dismissed, activated: {} };
+    })();
+    state.catch(() => states.delete(customerId)); // retry on the next request
+    states.set(customerId, state);
   }
-  return store[customerId];
+  return state;
 }
 
-export function getMomentsForCustomer(customerId: string): Moment[] {
-  return ensureLoaded(customerId);
+/** Starts the customer's demo over: detection runs again on the next request. */
+export function resetCustomer(customerId: string): void {
+  states.delete(customerId);
 }
 
-export function addMomentForCustomer(customerId: string, moment: Moment): void {
-  store[customerId] = [moment, ...ensureLoaded(customerId)];
+/** The customer with the products they hold, including ones activated during the demo. */
+export async function getCustomer(customerId: string): Promise<Persona | undefined> {
+  const persona = findPersona(customerId);
+  if (!persona) return undefined;
+  const { activated } = await customerState(customerId);
+  return { ...persona, products: { ...persona.products, ...activated } };
+}
+
+export async function activateProduct(customerId: string, productId: string): Promise<void> {
+  const state = await customerState(customerId);
+  state.activated = withProduct(state.activated, productId);
+}
+
+export async function getMoments(customerId: string): Promise<Moment[]> {
+  return (await customerState(customerId)).moments;
+}
+
+/** The moment only if it belongs to this customer. */
+export async function getMoment(customerId: string, momentId: string): Promise<Moment | undefined> {
+  return (await getMoments(customerId)).find((m) => m.id === momentId);
 }
 
 /**
  * Merges newly detected moments into the customer's timeline and links travel payments to trips.
  * Returns the moments that are new or changed.
  */
-export function addDetectedMoments(customerId: string, incoming: Moment[]): Moment[] {
-  const before = new Map(ensureLoaded(customerId).map((m) => [m.id, JSON.stringify(m)]));
-  const merged = mergeMoments(ensureLoaded(customerId), incoming, dismissedFor(customerId));
-  store[customerId] = attachTripPayments(merged, transactionsOf(customerId), todayIso());
-  return store[customerId].filter((m) => before.get(m.id) !== JSON.stringify(m));
+export async function addDetectedMoments(customerId: string, incoming: Moment[]): Promise<Moment[]> {
+  const state = await customerState(customerId);
+  const before = new Map(state.moments.map((m) => [m.id, JSON.stringify(m)]));
+  const merged = mergeMoments(state.moments, incoming, state.dismissed);
+  state.moments = attachTripPayments(merged, findPersona(customerId)?.transactions ?? [], todayIso());
+  return state.moments.filter((m) => before.get(m.id) !== JSON.stringify(m));
 }
 
-export function deleteMomentForCustomer(customerId: string, momentId: string): boolean {
-  const moments = ensureLoaded(customerId);
-  const target = moments.find((m) => m.id === momentId);
+/** Removes the moment if it belongs to this customer; false otherwise. */
+export async function deleteMoment(customerId: string, momentId: string): Promise<boolean> {
+  const state = await customerState(customerId);
+  const target = state.moments.find((m) => m.id === momentId);
   if (!target) return false;
-  store[customerId] = moments.filter((m) => m.id !== momentId);
-  dismissedFor(customerId).add(dismissKey(target));
+  state.moments = state.moments.filter((m) => m.id !== momentId);
+  state.dismissed.add(dismissKey(target));
   return true;
 }

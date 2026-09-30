@@ -2,7 +2,8 @@
 import type { Moment } from "../types";
 import { daysBetween } from "./dates";
 
-const SAME_MOMENT_DAYS = 7;
+// Start dates this close count as the same moment. Moves are fuzzy (deed, keys, moving day).
+const SAME_MOMENT_DAYS: Record<Moment["type"], number> = { trip_abroad: 7, wedding_guest: 7, moving: 45 };
 const BONUS_PER_SOURCE = 0.05;
 const MAX_CONFIDENCE = 0.99;
 
@@ -15,7 +16,7 @@ export function dismissKey(m: MomentKey): string {
 }
 
 function sameMoment(a: MomentKey, b: MomentKey): boolean {
-  return a.type === b.type && Math.abs(daysBetween(a.startDate, b.startDate)) <= SAME_MOMENT_DAYS;
+  return a.type === b.type && Math.abs(daysBetween(a.startDate, b.startDate)) <= SAME_MOMENT_DAYS[a.type];
 }
 
 function isDismissed(m: MomentKey, dismissed: Set<string>): boolean {

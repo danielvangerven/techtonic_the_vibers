@@ -1,40 +1,61 @@
+// Owner: B (Backend + AI). Signed session cookie (HS256 JWT via jose). The customer ID in it is
+// the only customer ID the API ever trusts.
 import { cookies } from "next/headers";
+import { SignJWT, jwtVerify } from "jose";
 
 const SESSION_COOKIE_NAME = "kbc_ahead_session";
+const MAX_AGE_SECONDS = 8 * 60 * 60;
 
 export interface SessionData {
   customerId: string;
   name: string;
 }
 
-export async function getSession(): Promise<SessionData | null> {
-  const cookieStore = await cookies();
-  const cookie = cookieStore.get(SESSION_COOKIE_NAME);
-  if (!cookie || !cookie.value) {
-    // Default fallback to lotte for fast local testing if not logged in
-    return { customerId: "lotte", name: "Lotte" };
-  }
+// Kept on globalThis so dev hot reloads don't invalidate the random dev secret.
+const globals = globalThis as { __kbcDevSecret?: Uint8Array };
 
+function secret(): Uint8Array {
+  const configured = process.env.SESSION_SECRET;
+  if (configured && configured.length >= 32) return new TextEncoder().encode(configured);
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("SESSION_SECRET must be set to at least 32 characters");
+  }
+  if (!globals.__kbcDevSecret) {
+    globals.__kbcDevSecret = crypto.getRandomValues(new Uint8Array(32));
+    console.warn("SESSION_SECRET is not set: using a random dev secret, sessions end when the server restarts");
+  }
+  return globals.__kbcDevSecret;
+}
+
+/** The logged-in customer, or null if there is no valid, unexpired session cookie. */
+export async function getSession(): Promise<SessionData | null> {
+  const token = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
+  if (!token) return null;
   try {
-    const decoded = Buffer.from(cookie.value, "base64").toString("utf-8");
-    return JSON.parse(decoded);
+    const { payload } = await jwtVerify(token, secret(), { algorithms: ["HS256"] });
+    if (typeof payload.sub !== "string" || typeof payload.name !== "string") return null;
+    return { customerId: payload.sub, name: payload.name };
   } catch {
     return null;
   }
 }
 
 export async function setSession(data: SessionData): Promise<void> {
-  const cookieStore = await cookies();
-  const encoded = Buffer.from(JSON.stringify(data)).toString("base64");
-  cookieStore.set(SESSION_COOKIE_NAME, encoded, {
+  const token = await new SignJWT({ name: data.name })
+    .setProtectedHeader({ alg: "HS256" })
+    .setSubject(data.customerId)
+    .setIssuedAt()
+    .setExpirationTime(`${MAX_AGE_SECONDS}s`)
+    .sign(secret());
+  (await cookies()).set(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
+    maxAge: MAX_AGE_SECONDS,
   });
 }
 
 export async function clearSession(): Promise<void> {
-  const cookieStore = await cookies();
-  cookieStore.delete(SESSION_COOKIE_NAME);
+  (await cookies()).delete(SESSION_COOKIE_NAME);
 }

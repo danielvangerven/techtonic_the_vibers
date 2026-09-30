@@ -1,23 +1,26 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/session";
-import { deleteMomentForCustomer } from "@/lib/store";
+import { authenticate, notFound, unauthorized } from "@/lib/api";
+import { deleteMoment, getMoment } from "@/lib/store";
+import { buildMomentView } from "@/lib/engine";
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+type Params = { params: Promise<{ id: string }> };
+
+/** One moment of the logged-in customer. Another customer's moment is a 404, never a 403. */
+export async function GET(_req: Request, { params }: Params) {
+  const auth = await authenticate();
+  if (!auth) return unauthorized();
+
+  const moment = await getMoment(auth.customerId, (await params).id);
+  if (!moment) return notFound();
+  return NextResponse.json(buildMomentView(auth.customer, moment));
+}
+
+/** "Remove / that's wrong": deletes the moment and keeps detection from bringing it back. */
+export async function DELETE(_req: Request, { params }: Params) {
+  const auth = await authenticate();
+  if (!auth) return unauthorized();
 
   const { id } = await params;
-  const deleted = deleteMomentForCustomer(session.customerId, id);
-
-  if (!deleted) {
-    // IDOR protection: return 404 if moment does not belong to session's customer
-    return NextResponse.json({ error: "Moment not found" }, { status: 404 });
-  }
-
+  if (!(await deleteMoment(auth.customerId, id))) return notFound();
   return NextResponse.json({ ok: true, deletedId: id });
 }

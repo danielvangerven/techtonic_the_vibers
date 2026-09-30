@@ -8,7 +8,7 @@ export interface Moment {
   type: MomentType;
   startDate: string; // ISO date
   endDate?: string;
-  attrs: { country?: string; city?: string; nights?: number };
+  attrs: { country?: string; city?: string; nights?: number; housing?: "rent" | "buy" };
   sources: { kind: "calendar" | "transaction" | "told_us"; label: string }[];
   confidence: number; // 0-1
 }

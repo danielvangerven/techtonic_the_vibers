@@ -33,20 +33,24 @@ export async function detectFromCalendar(
   const moments: Moment[] = [];
   usable.forEach((e, i) => {
     const result = results[i];
-    if (!result || result.type === "none") return;
-
+    if (!result) return;
     const place = findPlace(e.title);
-    const country = result.type === "trip_abroad" ? (result.country ?? place?.country) : place?.country;
-    if (result.type === "trip_abroad" && country === "BE") return; // not abroad, e.g. the flight home
+    // "QCon London" has no travel word: a multi-day event in a foreign city is a trip.
+    const foreignMultiDay = !!place && place.country !== "BE" && !!e.end;
+    const type = result.type === "none" && foreignMultiDay ? "trip_abroad" : result.type;
+    if (type === "none") return;
+
+    const country = type === "trip_abroad" ? (result.country ?? place?.country) : place?.country;
+    if (type === "trip_abroad" && country === "BE") return; // not abroad, e.g. the flight home
 
     const attrs: Moment["attrs"] = {};
     if (country) attrs.country = country;
     if (place?.city && place.country === country) attrs.city = place.city;
-    if (result.type === "trip_abroad" && e.end) attrs.nights = daysBetween(e.start, e.end);
+    if (type === "trip_abroad" && e.end) attrs.nights = daysBetween(e.start, e.end);
 
     moments.push({
       id: randomUUID(),
-      type: result.type,
+      type,
       startDate: e.start,
       ...(e.end ? { endDate: e.end } : {}),
       attrs,

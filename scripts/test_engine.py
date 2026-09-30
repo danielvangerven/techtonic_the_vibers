@@ -26,7 +26,7 @@ def test_datasets():
     
     print(f"  [OK] Customers loaded: {len(customers)} (Target: 5,000)")
     print(f"  [OK] Past Moments loaded: {len(moments)} (Target: ~12,000)")
-    print(f"  [OK] Personas loaded: {len(personas)} (Lotte & Tom)")
+    print(f"  [OK] Personas loaded: {len(personas)} (Thomas & Tom)")
     assert len(customers) >= 5000
     assert len(moments) >= 12000
     assert len(personas) >= 2
@@ -35,9 +35,9 @@ def test_privacy_and_peer_widening():
     print("\n[*] Testing Privacy & Cohort Widening (Min 50 Group Size)...")
     moments = json.loads((DATA_DIR / "past_moments.json").read_text(encoding="utf-8"))
     
-    lotte_cohort = [m for m in moments if m.get("type") == "trip_abroad" and m.get("country") == "PT" and m.get("household") == "single" and m.get("ageBand") == "18-29" and m.get("region") == "Flanders"]
-    print(f"  [OK] Lotte's narrow cohort count: n={len(lotte_cohort)} (>=50, comparison valid)")
-    assert len(lotte_cohort) >= 50
+    thomas_cohort = [m for m in moments if m.get("type") == "trip_abroad" and m.get("country") == "JP" and m.get("household") == "single" and m.get("ageBand") == "18-29" and m.get("region") == "Flanders"]
+    print(f"  [OK] Thomas's narrow cohort count: n={len(thomas_cohort)} (>=50, comparison valid)")
+    assert len(thomas_cohort) >= 50
     
     iceland_cohort = [m for m in moments if m.get("type") == "trip_abroad" and m.get("country") == "IS" and m.get("household") == "single" and m.get("ageBand") == "65+"]
     print(f"  [OK] Planted tiny Iceland cohort count: n={len(iceland_cohort)} (<50 -> comparison refused as privacy-safe)")
@@ -76,7 +76,7 @@ def test_readiness_and_gap_detection():
     print("\n[*] Testing Moment Readiness & Gap Detection...")
     trip_template = json.loads((TEMPLATES_DIR / "trip_abroad.json").read_text(encoding="utf-8"))
     personas = json.loads((DATA_DIR / "personas.json").read_text(encoding="utf-8"))
-    lotte = next(p for p in personas if p["id"] == "lotte")
+    thomas = next(p for p in personas if p["id"] == "thomas")
     
     checks = trip_template["checks"]
     done_count = 0
@@ -85,7 +85,7 @@ def test_readiness_and_gap_detection():
     for ch in checks:
         req = ch.get("productRequirement")
         if req:
-            has_prod = lotte["products"].get(req, False)
+            has_prod = thomas["products"].get(req, False)
             if has_prod:
                 done_count += 1
             else:
@@ -93,7 +93,7 @@ def test_readiness_and_gap_detection():
         else:
             done_count += 1
             
-    print(f"  [OK] Lotte Lisbon Trip Readiness: {done_count}/{len(checks)} (Target: 3/4 ready)")
+    print(f"  [OK] Thomas Lisbon Trip Readiness: {done_count}/{len(checks)} (Target: 3/4 ready)")
     print(f"  [OK] Gaps detected: {gaps} (Target: ['medical_cover'])")
     assert done_count == 3
     assert gaps == ["medical_cover"]

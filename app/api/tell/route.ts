@@ -1,56 +1,52 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/session";
-import { classifyTitle } from "@/lib/classify";
-import { addMomentForCustomer } from "@/lib/store";
+import { randomUUID } from "node:crypto";
+import { z } from "zod";
+import { authenticate, jsonError, rateLimit, readJson, tooManyRequests, unauthorized } from "@/lib/api";
+import { classifyTitle, classifyTitles } from "@/lib/classify";
+import { addDetectedMoments } from "@/lib/store";
 import { buildMomentView } from "@/lib/engine";
-import { getPersonas } from "@/lib/data";
+import { addDays, shortLabel, todayIso } from "@/lib/detect/dates";
+import { findPlace } from "@/lib/detect";
+import { isSensitiveEvent } from "@/lib/sensitive";
 import type { Moment } from "@/lib/types";
 
+const Body = z.object({ text: z.string().trim().min(1).max(300) });
+
+// Without a date in the text, a told moment is placed a month ahead.
+const DEFAULT_DAYS_AHEAD = 30;
+
+/** "Tell KBC": free text (max 300 chars) → a moment, via the same classifier as the calendar. */
 export async function POST(req: Request) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await authenticate();
+  if (!auth) return unauthorized();
+  if (!rateLimit(`tell:${auth.customerId}`, 10, 60_000)) return tooManyRequests();
 
-  try {
-    const { text } = await req.json();
-    if (!text || typeof text !== "string" || text.length > 300) {
-      return NextResponse.json({ error: "Invalid text (max 300 chars)" }, { status: 400 });
-    }
+  const parsed = Body.safeParse(await readJson(req));
+  if (!parsed.success) return jsonError("Send a text of 1 to 300 characters", 400);
+  const { text } = parsed.data;
+  if (isSensitiveEvent(text)) return jsonError("We don't use health or religious information", 422);
 
-    const classified = classifyTitle(text);
-    if (classified.type === "none") {
-      return NextResponse.json({ error: "Could not detect a life moment from this text" }, { status: 422 });
-    }
+  const [result] = await classifyTitles([text]);
+  // Renovation has no moment type yet; the keyword classifier maps it to moving.
+  const type = result.type !== "none" ? result.type : classifyTitle(text).type;
+  if (type === "none") return jsonError("We couldn't find an upcoming moment in that text", 422);
 
-    const newMoment: Moment = {
-      id: crypto.randomUUID(),
-      type: classified.type,
-      startDate: new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0],
-      attrs: { country: classified.country, city: classified.city, nights: classified.nights },
-      sources: [{ kind: "told_us", label: `You told KBC: "${text}"` }],
-      confidence: classified.confidence,
-    };
+  const today = todayIso();
+  const place = findPlace(text);
+  const country = type === "trip_abroad" ? (result.country ?? place?.country) : place?.country;
+  const attrs: Moment["attrs"] = {};
+  if (country) attrs.country = country;
+  if (place?.city && place.country === country) attrs.city = place.city;
 
-    addMomentForCustomer(session.customerId, newMoment);
-
-    const personas = getPersonas();
-    const customer = personas.find((p) => p.id === session.customerId) || {
-      id: session.customerId,
-      name: session.name,
-      age: 29,
-      ageBand: "18-29" as const,
-      household: "single" as const,
-      region: "Flanders",
-      city: "Ghent",
-      passwordHash: "",
-      products: {},
-      transactions: [],
-    };
-
-    const momentView = buildMomentView(customer, newMoment);
-    return NextResponse.json(momentView);
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
-  }
+  const moment: Moment = {
+    id: randomUUID(),
+    type,
+    startDate: addDays(today, DEFAULT_DAYS_AHEAD),
+    attrs,
+    // The text itself is not stored.
+    sources: [{ kind: "told_us", label: `You told KBC on ${shortLabel(today)}` }],
+    confidence: result.via === "ai" ? 0.9 : 0.7,
+  };
+  const changed = await addDetectedMoments(auth.customerId, [moment]);
+  return NextResponse.json({ ok: true, moments: changed.map((m) => buildMomentView(auth.customer, m)) });
 }

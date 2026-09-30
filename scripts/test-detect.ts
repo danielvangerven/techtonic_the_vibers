@@ -95,7 +95,7 @@ async function main() {
     assert.equal(move.type, "moving");
     assert.equal(move.startDate, "2026-12-01");
     assert.equal(move.confidence, 0.9);
-    assert.deepEqual(move.attrs, { city: "Leuven" });
+    assert.deepEqual(move.attrs, { housing: "rent", city: "Leuven" });
     assert.deepEqual(move.sources.map((s) => s.label), [
       "Rental deposit (€2,400) on 15 Sep",
       "Dockx Rental & Verhuizingen booking on 20 Sep",
@@ -115,7 +115,7 @@ async function main() {
   await test("merge: Lotte's TAP payment joins her calendar trip", async () => {
     const calendar = await detectFromCalendar(lotteCalendar, TODAY, keywordsOnly);
     const [trip] = attachTripPayments(calendar, lotteTxs, TODAY);
-    assert.deepEqual(trip.sources.map((s) => s.label), ["Calendar entry on 14 Oct", "TAP Air Portugal payment on 3 Sep"]);
+    assert.deepEqual(trip.sources.map((s) => s.label), ["Calendar entry on 14 Oct", "TAP Air Portugal (€185) on 3 Sep"]);
     assert.equal(trip.confidence, 0.75);
   });
 

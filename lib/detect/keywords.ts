@@ -17,9 +17,15 @@ export function normalize(text: string): string {
 
 // Checked in this order on normalised text; the first match wins.
 const RULES: [MomentType, RegExp][] = [
-  ["moving", /\b(verhui[sz]\w*|moving|move (?:house|in|out)|movers|demenag\w*)\b/],
+  [
+    "moving",
+    /\b(verhui[sz]\w*|moving|move (?:house|in|out)|movers|demenag\w*|notari\w*|notary|notaire|aankoopakte|deed|sleuteloverdracht|key handover|house purchase|nieuw huis|nieuwe woning)\b/,
+  ],
   ["wedding_guest", /\b(trouw\w*|huwelijk\w*|bruiloft|wedding|mariage)\b/],
-  ["trip_abroad", /\b(vlucht\w*|flights?|vols?|vliegtuig|reis naar|trip to|city ?trip|voyage)\b/],
+  [
+    "trip_abroad",
+    /\b(vlucht\w*|flights?|vols?|vliegtuig|reis naar|trip to|city ?trip|road ?trip|roadtrip|voyage|skivakantie|ski trip)\b/,
+  ],
 ];
 
 const city = (name: string, country: string): Place => ({ city: name, country });
@@ -38,8 +44,12 @@ const PLACES: Record<string, Place> = {
   wenen: city("Vienna", "AT"), vienna: city("Vienna", "AT"), wien: city("Vienna", "AT"), vienne: city("Vienna", "AT"),
   praag: city("Prague", "CZ"), prague: city("Prague", "CZ"), praha: city("Prague", "CZ"),
   athene: city("Athens", "GR"), athens: city("Athens", "GR"), athenes: city("Athens", "GR"),
-  tokio: city("Tokyo", "JP"), tokyo: city("Tokyo", "JP"), "new york": city("New York", "US"),
-  reykjavik: city("Reykjavik", "IS"),
+  tokio: city("Tokyo", "JP"), tokyo: city("Tokyo", "JP"), kyoto: city("Kyoto", "JP"), osaka: city("Osaka", "JP"),
+  "new york": city("New York", "US"), reykjavik: city("Reykjavik", "IS"),
+  interlaken: city("Interlaken", "CH"), zermatt: city("Zermatt", "CH"), jungfrau: city("Interlaken", "CH"),
+  zurich: city("Zurich", "CH"), geneve: city("Geneva", "CH"), geneva: city("Geneva", "CH"),
+  zwitserland: { country: "CH" }, switzerland: { country: "CH" }, suisse: { country: "CH" }, swiss: { country: "CH" },
+  engeland: { country: "GB" }, "united kingdom": { country: "GB" }, "verenigd koninkrijk": { country: "GB" },
   portugal: { country: "PT" }, spanje: { country: "ES" }, espagne: { country: "ES" }, spain: { country: "ES" },
   italie: { country: "IT" }, italy: { country: "IT" }, frankrijk: { country: "FR" }, france: { country: "FR" },
   griekenland: { country: "GR" }, greece: { country: "GR" }, grece: { country: "GR" },
@@ -51,6 +61,8 @@ const PLACES: Record<string, Place> = {
   leuven: city("Leuven", "BE"), louvain: city("Leuven", "BE"),
   brussel: city("Brussels", "BE"), brussels: city("Brussels", "BE"), bruxelles: city("Brussels", "BE"),
   luik: city("Liège", "BE"), liege: city("Liège", "BE"),
+  mechelen: city("Mechelen", "BE"), malines: city("Mechelen", "BE"), hasselt: city("Hasselt", "BE"),
+  brugge: city("Bruges", "BE"), bruges: city("Bruges", "BE"),
 };
 const PLACE_KEYS = Object.keys(PLACES).sort((a, b) => b.length - a.length);
 
