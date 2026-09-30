@@ -1,7 +1,9 @@
 // Owner: B (Backend + AI). Product recommendations and peer alternatives per moment.
 // Products are only recommended for real gaps: anything the customer already holds or has just
 // activated is left out, and the next product moves up.
+import { daysBetween, todayIso } from "./detect/dates";
 import type {
+  AdviceItem,
   KbcProductRecommendation,
   Moment,
   MomentRecommendations,
@@ -227,9 +229,110 @@ export function computeRecommendations(customer: Customer, moment: Moment, peers
   const open = offers
     .filter((o) => !holds(o.productId) && !holds(o.needsMissing))
     .map(({ needsMissing: _needsMissing, ...offer }) => offer);
+  const openAlternatives = alternatives.filter((a) => !holds(a.action?.target));
   return {
     bestProduct: open[0],
     secondaryProduct: open[1],
-    alternatives: alternatives.filter((a) => !holds(a.action?.target)),
+    alternatives: openAlternatives,
+    advice: computeAdvice(customer, moment, peers, open[1], openAlternatives),
   };
+}
+
+const round10 = (n: number) => Math.max(10, Math.round(n / 10) * 10);
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const shortDate = (iso: string) => `${+iso.slice(8, 10)} ${MONTHS[+iso.slice(5, 7) - 1]}`;
+
+/**
+ * Advice that thinks along with the customer: how much to put aside and by when (from what peers
+ * really spent), a buffer for surprises, and cheaper alternatives. Short titles; the why is in `detail`.
+ */
+function computeAdvice(
+  customer: Customer,
+  moment: Moment,
+  peers: PeerStats,
+  secondary: KbcProductRecommendation | undefined,
+  alternatives: SmartAlternative[],
+): AdviceItem[] {
+  const advice: AdviceItem[] = [];
+  const days = daysBetween(todayIso(), moment.startDate);
+  const saved = customer.products.kbc_savings_jar || customer.products.gift_pool;
+
+  // What the customer already paid for this moment (from the payments we linked to it).
+  const paid = moment.sources
+    .filter((s) => s.kind === "transaction")
+    .reduce((sum, s) => sum + Number(/\(€([\d,]+)\)/.exec(s.label)?.[1].replace(/,/g, "") ?? 0), 0);
+
+  if (peers.ok && moment.type === "trip_abroad" && paid > 0) {
+    const left = peers.median - paid;
+    advice.push(
+      left <= 0
+        ? {
+            id: "spent_already",
+            title: `You've already spent €${paid.toLocaleString("en-GB")}, more than most`,
+            detail: `People like you spent €${peers.median} in total on a trip like this. Keep an eye on daily spending once you're there.`,
+          }
+        : {
+            id: "left_to_budget",
+            title: `Budget about €${round10(left).toLocaleString("en-GB")} more for the trip itself`,
+            detail: `You've paid €${paid.toLocaleString("en-GB")} so far. People like you spent €${peers.median} in total.`,
+            action: { label: "Set budget", target: "kbc_savings_jar" },
+          },
+    );
+  } else if (peers.ok && moment.type === "moving") {
+    advice.push({
+      id: "moving_reserve",
+      title: `Keep €${peers.median.toLocaleString("en-GB")} ready for the first 3 months`,
+      detail: `That's what people like you spent extra after moving: furniture, repairs, double rent or fees. Most spent between €${peers.p20} and €${peers.p80}.`,
+      action: { label: "Set aside", target: "kbc_savings_jar" },
+    });
+  } else if (peers.ok && !saved && moment.type === "trip_abroad") {
+    const what = "on a trip like this";
+    if (days >= 35) {
+      const weeks = Math.floor(days / 7);
+      advice.push({
+        id: "save_weekly",
+        title: `Put aside €${round10(peers.median / weeks)} a week until ${shortDate(moment.startDate)}`,
+        detail: `People like you spent €${peers.median} ${what} (most between €${peers.p20} and €${peers.p80}). Spread over ${weeks} weeks, it won't feel like a big hit.`,
+        action: { label: "Start saving", target: "kbc_savings_jar" },
+      });
+    } else {
+      advice.push({
+        id: "budget",
+        title: `Plan for about €${peers.median}`,
+        detail: `That's what people like you spent ${what}. Most spent between €${peers.p20} and €${peers.p80}.`,
+        action: { label: "Set budget", target: "kbc_savings_jar" },
+      });
+    }
+  }
+
+  if (peers.ok && peers.unexpectedMedian) {
+    advice.push({
+      id: "buffer",
+      title: `Keep €${peers.unexpectedMedian} extra for surprises`,
+      detail: `People like you typically ran into about €${peers.unexpectedMedian} of unexpected costs: taxis, a doctor, a lost bag.`,
+    });
+  }
+
+  if (moment.type === "moving" && moment.attrs.housing === "buy") {
+    advice.push({
+      id: "insure_before_keys",
+      title: "Insure the house from the day you sign",
+      detail: "Fire insurance is required by your mortgage and must start on the day of the deed, not the day you move in.",
+    });
+  }
+
+  if (secondary) {
+    advice.push({
+      id: secondary.productId,
+      title: secondary.name.replace(/\s*\(.*\)\s*/, "").replace(/^Kate Deals: /, ""),
+      detail: secondary.reason,
+      action: { label: "Add", target: secondary.productId },
+    });
+  }
+
+  // An "instead" alternative makes no sense once the trip is paid for.
+  for (const alt of alternatives.filter((a) => !(paid > 0 && /instead/i.test(a.title)))) {
+    advice.push({ id: alt.id, title: alt.title, detail: alt.description, savings: alt.estimatedSavings, action: alt.action });
+  }
+  return advice.slice(0, 4);
 }

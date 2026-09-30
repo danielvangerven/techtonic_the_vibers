@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { MomentView } from "@/lib/types";
+import type { AdviceItem, MomentView } from "@/lib/types";
 import { MOMENT_KIND, daysUntil, euro, formatDateRange, formatRelative, momentTitle } from "@/lib/format";
 import { AlertIcon, CheckIcon, ChevronDownIcon, CircleIcon } from "./icons";
 
@@ -13,6 +13,30 @@ interface Props {
 
 // "KBC Global Travel Assistance (Wereldwijde Reisbijstand)" → "KBC Global Travel Assistance"
 const shortName = (name: string) => name.replace(/\s*\(.*\)\s*/, "").replace(/^Kate Deals: /, "");
+
+function AdviceRow({ item, busy, onAction }: { item: AdviceItem; busy: boolean; onAction: (id: string) => void }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <li className="py-2.5">
+      <div className="flex items-center gap-3">
+        <button onClick={() => setOpen(!open)} className="min-w-0 flex-1 text-left text-sm text-zinc-900 hover:text-brand-700">
+          {item.title}
+          {item.savings && <span className="ml-2 text-emerald-700">{item.savings}</span>}
+        </button>
+        {item.action && (
+          <button
+            onClick={() => onAction(item.action!.target)}
+            disabled={busy}
+            className="shrink-0 rounded-md border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-800 hover:bg-zinc-50 disabled:opacity-50"
+          >
+            {item.action.label.length > 22 ? "Do it" : item.action.label}
+          </button>
+        )}
+      </div>
+      {open && <p className="mt-1 text-sm text-zinc-500">{item.detail}</p>}
+    </li>
+  );
+}
 
 export default function MomentCard({ view, defaultOpen = false, onChanged }: Props) {
   const { moment, readiness, checks, peers, recommendations } = view;
@@ -88,6 +112,17 @@ export default function MomentCard({ view, defaultOpen = false, onChanged }: Pro
                 {busy ? "Adding…" : advice.priceOrRate?.startsWith("€") ? `Add · ${advice.priceOrRate.split(" ")[0]}` : "Add"}
               </button>
             </div>
+          )}
+
+          {recommendations && recommendations.advice.length > 0 && (
+            <section className="mt-6">
+              <h4 className="text-xs font-medium uppercase tracking-wide text-zinc-500">Our advice</h4>
+              <ul className="mt-2 divide-y divide-zinc-100">
+                {recommendations.advice.map((a) => (
+                  <AdviceRow key={a.id} item={a} busy={busy} onAction={activate} />
+                ))}
+              </ul>
+            </section>
           )}
 
           {why && (

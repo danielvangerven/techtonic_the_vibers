@@ -57,6 +57,15 @@ export interface MomentRecommendations {
   bestProduct?: KbcProductRecommendation;
   secondaryProduct?: KbcProductRecommendation;
   alternatives: SmartAlternative[];
+  advice: AdviceItem[]; // short, personal financial advice for this moment
+}
+
+export interface AdviceItem {
+  id: string;
+  title: string; // one short line, e.g. "Save €90 a week until 14 Oct"
+  detail: string; // why, shown on click
+  savings?: string; // e.g. "Save ~€850"
+  action?: { label: string; target: string }; // a product ID from lib/products.ts
 }
 
 export interface MomentView {
