@@ -1,13 +1,13 @@
 [
   {
-    "id": "lotte",
-    "name": "Lotte",
-    "age": 29,
+    "id": "thomas",
+    "name": "Thomas Dubois",
+    "age": 28,
     "ageBand": "18-29",
     "household": "single",
     "region": "Flanders",
     "city": "Ghent",
-    "passwordHash": "$2b$10$demoHashForLotte1234567890abcdef",
+    "passwordHash": "$2b$10$demoHashForThomas",
     "products": {
       "cancellation_cover": true,
       "travel_medical": false,
@@ -18,21 +18,114 @@
     "transactions": [
       {
         "date": "2026-09-03",
-        "merchant": "TAP Air Portugal",
-        "amount": 185.0,
-        "type": "cancellation_cover"
+        "merchant": "ANA All Nippon Airways",
+        "amount": 1150.00,
+        "type": "flight"
+      },
+      {
+        "date": "2026-09-05",
+        "merchant": "Airbnb Kyoto Traditional Stay",
+        "amount": 840.00,
+        "type": "accommodation"
+      }
+    ]
+  },
+  {
+    "id": "lotte",
+    "name": "Lotte (Thomas)",
+    "age": 28,
+    "ageBand": "18-29",
+    "household": "single",
+    "region": "Flanders",
+    "city": "Ghent",
+    "passwordHash": "$2b$10$demoHashForLotte",
+    "products": {
+      "cancellation_cover": true,
+      "travel_medical": false,
+      "home_insurance": true,
+      "hospitalisation": true,
+      "pension_savings": true
+    },
+    "transactions": [
+      {
+        "date": "2026-09-03",
+        "merchant": "ANA All Nippon Airways",
+        "amount": 1150.00,
+        "type": "flight"
+      },
+      {
+        "date": "2026-09-05",
+        "merchant": "Airbnb Kyoto Traditional Stay",
+        "amount": 840.00,
+        "type": "accommodation"
+      }
+    ]
+  },
+  {
+    "id": "emma",
+    "name": "Emma Van de Velde",
+    "age": 24,
+    "ageBand": "18-29",
+    "household": "single",
+    "region": "Flanders",
+    "city": "Leuven",
+    "passwordHash": "$2b$10$demoHashForEmma",
+    "products": {
+      "cancellation_cover": false,
+      "travel_medical": false,
+      "home_insurance": false,
+      "hospitalisation": true,
+      "pension_savings": false
+    },
+    "transactions": [
+      {
+        "date": "2026-09-08",
+        "merchant": "Rooftop Leuven Events BV",
+        "amount": 250.00,
+        "type": "venue_deposit"
+      },
+      {
+        "date": "2026-09-14",
+        "merchant": "Ticketmaster Belgium",
+        "amount": 315.00,
+        "type": "festival"
+      }
+    ]
+  },
+  {
+    "id": "lucas",
+    "name": "Lucas & Sophie Peeters",
+    "age": 36,
+    "ageBand": "30-44",
+    "household": "family",
+    "region": "Flanders",
+    "city": "Mechelen",
+    "passwordHash": "$2b$10$demoHashForLucas",
+    "products": {
+      "cancellation_cover": true,
+      "travel_medical": true,
+      "home_insurance": false,
+      "hospitalisation": true,
+      "pension_savings": true
+    },
+    "transactions": [
+      {
+        "date": "2026-09-15",
+        "merchant": "Notarisassociatie Van Damme",
+        "amount": 5000.00,
+        "type": "notary_deposit"
       }
     ]
   },
   {
     "id": "tom",
-    "name": "Tom",
+    "name": "Tom (Lucas)",
     "age": 34,
     "ageBand": "30-44",
     "household": "couple",
     "region": "Flanders",
     "city": "Leuven",
-    "passwordHash": "$2b$10$demoHashForTom1234567890abcdef",
+    "passwordHash": "$2b$10$demoHashForTom",
     "products": {
       "cancellation_cover": false,
       "travel_medical": false,
@@ -44,14 +137,39 @@
       {
         "date": "2026-09-15",
         "merchant": "Immo Leuven - Huurwaarborg",
-        "amount": 2400.0,
+        "amount": 2400.00,
         "type": "rental_deposit"
       },
       {
         "date": "2026-09-20",
         "merchant": "Dockx Rental & Verhuizingen",
-        "amount": 350.0,
+        "amount": 350.00,
         "type": "removal_firm"
+      }
+    ]
+  },
+  {
+    "id": "marc",
+    "name": "Marc Verhoeven",
+    "age": 58,
+    "ageBand": "45-64",
+    "household": "couple",
+    "region": "Flanders",
+    "city": "Hasselt",
+    "passwordHash": "$2b$10$demoHashForMarc",
+    "products": {
+      "cancellation_cover": true,
+      "travel_medical": true,
+      "home_insurance": true,
+      "hospitalisation": true,
+      "pension_savings": true
+    },
+    "transactions": [
+      {
+        "date": "2026-09-07",
+        "merchant": "Olympic Yachting Athens Ltd",
+        "amount": 1450.00,
+        "type": "yacht_deposit"
       }
     ]
   }
