@@ -90,3 +90,18 @@ Signing in (including switching customers) resets the demo to its starting point
 
 **Why is there no "spent by people like you" amount on a card?**
 There weren't enough similar customers to make a fair comparison, so none is shown.
+
+## The future of banking
+With more development time, we would expand KBC Ahead with additional signals and capabilities.
+
+For example, the system could recognize recurring expenses such as groceries, gas, subscriptions and other routine payments. Combining these patterns with calendar events and other signals could allow KBC to build an even more complete understanding of a customer's financial situation.
+
+The goal is to continuously improve how KBC understands its customers and make its support more relevant, timely and personal.
+
+KBC Ahead is not just about connecting a calendar to a banking app.
+
+It is about changing the relationship between a customer and their bank.
+
+From knowing your finances to understanding your life.
+
+KBC Ahead — a bank that doesn't wait for you to ask.
