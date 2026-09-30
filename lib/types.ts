@@ -39,3 +39,20 @@ export interface MomentView {
   checks: Check[];
   peers: PeerStats;
 }
+
+// A customer's bank transaction, as in data/personas.json. `amount` is the money paid (positive).
+export interface Transaction {
+  date: string; // ISO date
+  merchant: string;
+  amount: number;
+  type?: string; // bank category, e.g. "rental_deposit"
+  description?: string; // payment message, e.g. "Voorschot verhuis 01/12/2026"
+}
+
+// A calendar entry as the browser sends it, after its sensitive filter.
+// Titles only, no attendees, notes or locations. `endDate` is the last day of the event.
+export interface CalendarEvent {
+  title: string;
+  startDate: string; // ISO date or date-time
+  endDate?: string;
+}

@@ -51,7 +51,8 @@
         "date": "2026-09-20",
         "merchant": "Dockx Rental & Verhuizingen",
         "amount": 350.0,
-        "type": "removal_firm"
+        "type": "removal_firm",
+        "description": "Voorschot verhuis 01/12/2026"
       }
     ]
   }
