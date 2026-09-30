@@ -1,0 +1,58 @@
+[
+  {
+    "id": "lotte",
+    "name": "Lotte",
+    "age": 29,
+    "ageBand": "18-29",
+    "household": "single",
+    "region": "Flanders",
+    "city": "Ghent",
+    "passwordHash": "$2b$10$demoHashForLotte1234567890abcdef",
+    "products": {
+      "cancellation_cover": true,
+      "travel_medical": false,
+      "home_insurance": true,
+      "hospitalisation": true,
+      "pension_savings": true
+    },
+    "transactions": [
+      {
+        "date": "2026-09-03",
+        "merchant": "TAP Air Portugal",
+        "amount": 185.0,
+        "type": "cancellation_cover"
+      }
+    ]
+  },
+  {
+    "id": "tom",
+    "name": "Tom",
+    "age": 34,
+    "ageBand": "30-44",
+    "household": "couple",
+    "region": "Flanders",
+    "city": "Leuven",
+    "passwordHash": "$2b$10$demoHashForTom1234567890abcdef",
+    "products": {
+      "cancellation_cover": false,
+      "travel_medical": false,
+      "home_insurance": false,
+      "hospitalisation": true,
+      "pension_savings": true
+    },
+    "transactions": [
+      {
+        "date": "2026-09-15",
+        "merchant": "Immo Leuven - Huurwaarborg",
+        "amount": 2400.0,
+        "type": "rental_deposit"
+      },
+      {
+        "date": "2026-09-20",
+        "merchant": "Dockx Rental & Verhuizingen",
+        "amount": 350.0,
+        "type": "removal_firm"
+      }
+    ]
+  }
+]

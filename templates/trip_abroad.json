@@ -1,0 +1,38 @@
+{
+  "type": "trip_abroad",
+  "label": "Trip abroad",
+  "checks": [
+    {
+      "id": "card_country",
+      "label": "Your card works in {countryName}",
+      "productRequirement": null,
+      "peerKey": "card_country"
+    },
+    {
+      "id": "cancellation_cover",
+      "label": "Cancellation cover via your card",
+      "productRequirement": "cancellation_cover",
+      "peerKey": "cancellation_cover",
+      "action": {
+        "label": "Upgrade to KBC Plus card with cancellation cover",
+        "productId": "kbc_plus_card"
+      }
+    },
+    {
+      "id": "medical_cover",
+      "label": "Medical cover abroad",
+      "productRequirement": "travel_medical",
+      "peerKey": "medical_cover",
+      "action": {
+        "label": "Add travel medical cover, €12",
+        "productId": "travel_medical"
+      }
+    },
+    {
+      "id": "trip_budget",
+      "label": "Trip budget set",
+      "productRequirement": null,
+      "peerKey": "trip_budget"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "type": "wedding_guest",
+  "label": "Wedding guest",
+  "checks": [
+    {
+      "id": "gift_set_aside",
+      "label": "Gift set aside",
+      "productRequirement": null,
+      "peerKey": "gift_set_aside",
+      "action": {
+        "label": "Open KBC Gift Pool",
+        "productId": "kbc_gift_pool"
+      }
+    },
+    {
+      "id": "travel_outfit_budget",
+      "label": "Travel and outfit budget",
+      "productRequirement": null,
+      "peerKey": "travel_outfit_budget"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "type": "moving",
+  "label": "Moving house",
+  "checks": [
+    {
+      "id": "rental_deposit",
+      "label": "Rental deposit paid (Huurwaarborg)",
+      "productRequirement": null,
+      "peerKey": "rental_deposit"
+    },
+    {
+      "id": "home_insurance",
+      "label": "Home insurance updated for new address",
+      "productRequirement": "home_insurance",
+      "peerKey": "home_insurance",
+      "action": {
+        "label": "Update KBC Home Insurance address",
+        "productId": "home_insurance"
+      }
+    },
+    {
+      "id": "address_change",
+      "label": "Official address change registered",
+      "productRequirement": null,
+      "peerKey": "address_change"
+    },
+    {
+      "id": "energy_contract",
+      "label": "Energy contract transferred",
+      "productRequirement": null,
+      "peerKey": "energy_contract"
+    }
+  ]
+}
