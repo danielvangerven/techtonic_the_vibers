@@ -72,15 +72,11 @@ def generate_customers(n=5000):
 def generate_past_moments(customers, n=12000):
     moments = []
     
-    # 1. Trips
+    # Main trips generation (excluding Iceland from general random pool)
+    regular_destinations = [d for d in TRIP_DESTINATIONS.keys() if d != "IS"]
     for _ in range(int(n * 0.70)):
         cust = random.choice(customers)
-        # Avoid planting Iceland unless deliberate
-        dest_code = random.choice(list(TRIP_DESTINATIONS.keys()))
-        
-        # Enforce tiny cohort: only 8 trips to Iceland for singles 65+
-        if dest_code == "IS" and (cust["household"] != "single" or cust["ageBand"] != "65+"):
-            dest_code = "PT"
+        dest_code = random.choice(regular_destinations)
             
         nights = random.choice([3, 4, 7, 10, 14])
         daily_cost = TRIP_DESTINATIONS[dest_code]["daily"]
