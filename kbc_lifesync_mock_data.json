@@ -1,0 +1,1589 @@
+{
+  "metadata": {
+    "projectName": "KBC LifeSync (Team The Vibers)",
+    "version": "2.0.0",
+    "totalUsers": 4,
+    "totalEvents": 24
+  },
+  "communityBenchmarks": {
+    "INTERNATIONAL_TRAVEL": {
+      "JP": {
+        "countryName": "Japan",
+        "currency": "JPY",
+        "avgDailySpendEUR": 115.0,
+        "cashVsCardRatio": "40% Cash / 60% Card (Many local ramen bars, shrines, and metro kiosks are cash-only)",
+        "communityStats": {
+          "cardNonEuActivationRate": "86% of KBC travelers activate Non-EU debit card access 7-14 days before departure.",
+          "currencyPreOrderRate": "68% pre-order ¥30,000-¥50,000 JPY cash in KBC Mobile to avoid high airport exchange fees.",
+          "travelInsuranceRate": "92% travel with KBC Global Travel Assistance for high medical coverage in Asia."
+        }
+      },
+      "GB": {
+        "countryName": "United Kingdom",
+        "currency": "GBP",
+        "avgDailySpendEUR": 140.0,
+        "cashVsCardRatio": "5% Cash / 95% Card (London is virtually cashless)",
+        "communityStats": {
+          "currencyWallet": "79% of Belgian travelers to London hold GBP in multi-currency to avoid dynamic FX fees on transport & contactless.",
+          "travelRoaming": "91% activate UK data roaming packages or use KBC Deals partner eSIMs."
+        }
+      },
+      "CH": {
+        "countryName": "Switzerland",
+        "currency": "CHF",
+        "avgDailySpendEUR": 160.0,
+        "cashVsCardRatio": "10% Cash / 90% Card",
+        "communityStats": {
+          "vignettePreOrder": "74% buy the Swiss e-Vignette directly via KBC Deals/Mobility tab.",
+          "currencyWallet": "81% utilize KBC multi-currency live conversion to lock in favorable exchange rates."
+        }
+      }
+    },
+    "EUROPEAN_TRAVEL": {
+      "PT": {
+        "countryName": "Portugal",
+        "currency": "EUR",
+        "avgDailySpendEUR": 75.0,
+        "communityStats": {
+          "cashbackRate": "94% use KBC Deals for 4-8% cashback on Booking.com & Ryanair car rentals.",
+          "flightDelayProtection": "62% activate automatic Flight Delay Instant Compensation."
+        }
+      },
+      "GR": {
+        "countryName": "Greece",
+        "currency": "EUR",
+        "avgDailySpendEUR": 130.0,
+        "communityStats": {
+          "cardLimitBuffer": "83% of yacht charterers temporarily raise credit card limits by €2,500 for marina security deposits.",
+          "boatingAssistance": "89% verify maritime assistance coverage under KBC Family Insurance."
+        }
+      }
+    },
+    "BIRTHDAY_MILESTONE": {
+      "milestone25": {
+        "avgCelebrationBudgetEUR": 380.0,
+        "communityStats": {
+          "groupPotUsage": "79% of 20-30yo KBC customers create a KBC 'Group Pot' (Cadeaupot) for sharing party costs and group gifts.",
+          "cashbackSavings": "Average €28 saved by booking event venues and catering through KBC Deals partners."
+        }
+      }
+    },
+    "FESTIVAL_ENTERTAINMENT": {
+      "rock_werchter": {
+        "avgFestivalSpendEUR": 310.0,
+        "communityStats": {
+          "coinPreloading": "65% of festival attendees use contactless wristband auto-topup via KBC Mobile.",
+          "safeCardLimit": "88% set a temporary daily ATM limit to avoid overspending at festival grounds."
+        }
+      }
+    },
+    "HOME_PURCHASE_NOTARY": {
+      "notary_milestone": {
+        "avgRenovationBufferEUR": 18500.0,
+        "communityStats": {
+          "renovationAccount": "91% of buyers open a dedicated KBC Renovation Savings Account with automated contractor invoice validation.",
+          "homeInsurance": "100% of mortgage holders bundle KBC Fire & Family Insurance before official deed transfer."
+        }
+      }
+    },
+    "SUSTAINABILITY_INVESTMENT": {
+      "solar_heatpump": {
+        "avgInvestmentEUR": 16500.0,
+        "communityStats": {
+          "greenLoan": "82% finance green home improvements via the KBC Green Energy Loan at a reduced interest rate.",
+          "subsidies": "Average €2,100 reclaimed in Flemish energy transition subsidies through KBC's automated grant scanner."
+        }
+      }
+    },
+    "FAMILY_MILESTONE": {
+      "junior_growth": {
+        "avgMonthlyContributionEUR": 85.0,
+        "communityStats": {
+          "investPlan": "76% of grandparents choose KBC Junior Growth Investment over traditional low-yield savings books.",
+          "maturityValue": "Projected €28,400 at age 18 based on historical 5.2% annualized growth."
+        }
+      }
+    },
+    "HEALTH_MEDICAL": {
+      "hospitalization": {
+        "communityStats": {
+          "mediAssistance": "93% register planned hospital admissions via KBC Medi-Assistance for direct third-party payment.",
+          "dentalCoverage": "71% with children aged 8-14 utilize KBC Dentalia supplementary benefits."
+        }
+      }
+    },
+    "BUSINESS_TAX": {
+      "corporate_quarterly": {
+        "communityStats": {
+          "taxBufferAccount": "87% of Flemish SMEs utilize automated tax buffer accounts to earn interest on VAT reserves before payout.",
+          "advisorSync": "74% share automated digital bank statements with their accountant via KBC Corporate Cloud."
+        }
+      }
+    }
+  },
+  "users": [
+    {
+      "userId": "user_thomas",
+      "name": "Thomas Dubois",
+      "age": 28,
+      "city": "Ghent",
+      "occupation": "Software Engineer",
+      "segment": "Young Professional / Frequent Traveler",
+      "financialSnapshot": {
+        "checkingBalance": 3450.75,
+        "savingsBalance": 18200.0,
+        "monthlyIncome": 3100.0,
+        "hasTravelInsurance": false,
+        "cardNonEuActive": false,
+        "currencyWallets": [
+          "EUR"
+        ],
+        "creditCardLimit": 2500.0
+      },
+      "transactions": [
+        {
+          "id": "tx_th_101",
+          "date": "2026-09-24T14:22:58.794856",
+          "merchant": "ANA All Nippon Airways",
+          "mccCategory": "AIRLINES",
+          "amount": 1150.0,
+          "currency": "EUR",
+          "type": "DEBIT_CARD",
+          "description": "Flight Brussels (BRU) - Tokyo Haneda (HND) Roundtrip",
+          "status": "COMPLETED",
+          "matchedEventId": "thomas_evt_1"
+        },
+        {
+          "id": "tx_th_102",
+          "date": "2026-09-26T19:10:58.794856",
+          "merchant": "Airbnb Payments UK",
+          "mccCategory": "ACCOMMODATION",
+          "amount": 840.0,
+          "currency": "EUR",
+          "type": "CREDIT_CARD",
+          "description": "7 nights traditional Machiya in Kyoto",
+          "status": "COMPLETED",
+          "matchedEventId": "thomas_evt_1"
+        },
+        {
+          "id": "tx_th_103",
+          "date": "2026-09-29T12:45:58.794856",
+          "merchant": "Eurostar International Ltd",
+          "mccCategory": "RAILWAYS",
+          "amount": 145.0,
+          "currency": "EUR",
+          "type": "DEBIT_CARD",
+          "description": "Brussels Midi to London St Pancras Standard Premier",
+          "status": "COMPLETED",
+          "matchedEventId": "thomas_evt_5"
+        },
+        {
+          "id": "tx_th_104",
+          "date": "2026-09-20T16:30:58.794856",
+          "merchant": "Energy Lab Ghent",
+          "mccCategory": "SPORTS_RECREATION",
+          "amount": 45.0,
+          "currency": "EUR",
+          "type": "BANCONTACT",
+          "description": "Ghent Half Marathon 2026 Registration Ticket",
+          "status": "COMPLETED",
+          "matchedEventId": "thomas_evt_4"
+        },
+        {
+          "id": "tx_th_105",
+          "date": "2026-09-12T21:15:58.794856",
+          "merchant": "Otomat Ghent",
+          "mccCategory": "RESTAURANTS",
+          "amount": 112.5,
+          "currency": "EUR",
+          "type": "BANCONTACT",
+          "description": "Previous Ghent Foodies group dinner (split via Payconiq)",
+          "status": "COMPLETED",
+          "matchedEventId": "thomas_evt_2"
+        }
+      ],
+      "agenda": [
+        {
+          "id": "thomas_evt_1",
+          "title": "Vacation: Trip to Tokyo & Kyoto 🇯🇵",
+          "category": "INTERNATIONAL_TRAVEL",
+          "frequency": "INFREQUENT_MAJOR",
+          "location": "Tokyo & Kyoto, Japan",
+          "country": "JP",
+          "destinationCurrency": "JPY",
+          "isNonEurozone": true,
+          "startDate": "2026-10-14T10:00:58.794856",
+          "endDate": "2026-10-28T18:00:58.794856",
+          "durationDays": 14,
+          "participants": [
+            "thomas.dubois@gmail.com",
+            "laura.v@outlook.com"
+          ],
+          "notes": "14-day holiday. Flights with ANA. Need yen cash for temples, ramen bars, and JR train pass."
+        },
+        {
+          "id": "thomas_evt_2",
+          "title": "Ghent Foodies Monthly Group Dinner 🍕",
+          "category": "SOCIAL_DINING",
+          "frequency": "FREQUENT_MONTHLY",
+          "location": "Otomat Ghent, Belgium",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-03T19:30:58.794856",
+          "endDate": "2026-10-03T22:30:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "thomas.dubois@gmail.com",
+            "sarah.m@gmail.com",
+            "arne.d@telenet.be",
+            "elena.k@gmail.com"
+          ],
+          "notes": "Thomas pays table total. Auto-split via Payconiq / KBC Split Bill with 4 friends."
+        },
+        {
+          "id": "thomas_evt_3",
+          "title": "Annual Car Technical Inspection (Autokeuring) 🚗",
+          "category": "MOBILITY_MAINTENANCE",
+          "frequency": "ANNUAL",
+          "location": "SBAT Keuring Nazareth, Belgium",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-21T08:30:58.794856",
+          "endDate": "2026-10-21T10:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "thomas.dubois@gmail.com"
+          ],
+          "notes": "Annual mandatory inspection for VW Golf. Check green insurance card validity."
+        },
+        {
+          "id": "thomas_evt_4",
+          "title": "Ghent Half Marathon 🏃‍♂️",
+          "category": "SPORTS_EVENT",
+          "frequency": "SEMI_ANNUAL",
+          "location": "Topsporthal Vlaanderen, Ghent",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-11-04T09:00:58.794856",
+          "endDate": "2026-11-04T13:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "thomas.dubois@gmail.com",
+            "runclub@gent.be"
+          ],
+          "notes": "Entry fee €45 paid. Need new running shoes (KBC Deals Decathlon cashback)."
+        },
+        {
+          "id": "thomas_evt_5",
+          "title": "Tech Conference London (QCon London) 🇬🇧",
+          "category": "INTERNATIONAL_TRAVEL",
+          "frequency": "INFREQUENT_BUSINESS",
+          "location": "QEII Centre, London, UK",
+          "country": "GB",
+          "destinationCurrency": "GBP",
+          "isNonEurozone": true,
+          "startDate": "2026-11-19T08:00:58.794856",
+          "endDate": "2026-11-22T20:00:58.794856",
+          "durationDays": 3,
+          "participants": [
+            "thomas.dubois@work.be",
+            "team-lead@work.be"
+          ],
+          "notes": "Eurostar booked. Hotel in Westminster. Need British Pound spending without dynamic FX markups."
+        },
+        {
+          "id": "thomas_evt_6",
+          "title": "Home Telecom & Fiber Contract Renewal 🌐",
+          "category": "RECURRING_UTILITY",
+          "frequency": "ANNUAL",
+          "location": "Home Ghent",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-12T14:00:58.794856",
+          "endDate": "2026-10-12T15:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "thomas.dubois@gmail.com"
+          ],
+          "notes": "Evaluate current €65/mo fiber package vs new partner deals in KBC Deals."
+        }
+      ],
+      "generatedRecommendations": [
+        {
+          "eventId": "thomas_evt_1",
+          "eventTitle": "Vacation: Trip to Tokyo & Kyoto 🇯🇵",
+          "urgency": "HIGH",
+          "category": "INTERNATIONAL_TRAVEL",
+          "kateSpeech": "Hello Thomas, I saw your ANA All Nippon Airways booking for Japan. Since your debit card is still locked for Non-EU and no travel insurance is active, I've prepared 1-tap solutions for you.",
+          "insightSummary": "Trip to Japan (JPY) • Total commitments: €1,990.00",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Vacation: Trip to Tokyo & Kyoto 🇯🇵 (14 days)",
+            "detectedTransactions": [
+              "Confirmed booking: ANA All Nippon Airways (€1,150.00)",
+              "Confirmed stay: Airbnb Payments UK (€840.00)"
+            ],
+            "financialCommitment": "€1,990.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "€115.0 / day",
+            "paymentHabits": "40% Cash / 60% Card (Many local ramen bars, shrines, and metro kiosks are cash-only)",
+            "peerBehavior": "86% of KBC travelers activate Non-EU debit card access 7-14 days before departure. 68% pre-order ¥30,000-¥50,000 JPY cash in KBC Mobile to avoid high airport exchange fees. 92% travel with KBC Global Travel Assistance for high medical coverage in Asia."
+          },
+          "statusAlerts": [
+            "🛡️ Protection Gap: €1,990.00 spent on travel with no active KBC Travel Insurance.",
+            "⚠️ Card Gap: Debit card is currently locked for Japan (Non-EU)."
+          ],
+          "suggestedActions": [
+            {
+              "actionId": "act_travel_insurance",
+              "label": "Activate KBC Global Travel Insurance (€18.50/trip)",
+              "type": "INSTANT_INSURANCE",
+              "badge": "Missing Protection"
+            },
+            {
+              "actionId": "act_unlock_card",
+              "label": "1-Tap Unlock Debit Card for Japan",
+              "type": "ONE_CLICK_TOGGLE",
+              "badge": "Crucial Action"
+            },
+            {
+              "actionId": "act_currency_order",
+              "label": "Pre-order JPY Cash or Open JPY Sub-Wallet",
+              "type": "CURRENCY_SERVICE",
+              "badge": "Avoid Airport FX Markup"
+            }
+          ]
+        },
+        {
+          "eventId": "thomas_evt_2",
+          "eventTitle": "Ghent Foodies Monthly Group Dinner 🍕",
+          "urgency": "LOW",
+          "category": "SOCIAL_DINING",
+          "kateSpeech": "You have 'Ghent Foodies Monthly Group Dinner 🍕' scheduled, Thomas.",
+          "insightSummary": "Calendar event: Ghent Foodies Monthly Group Dinner 🍕",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Ghent Foodies Monthly Group Dinner 🍕",
+            "detectedTransactions": [
+              "Otomat Ghent (€112.50)"
+            ],
+            "financialCommitment": "€112.50"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "thomas_evt_3",
+          "eventTitle": "Annual Car Technical Inspection (Autokeuring) 🚗",
+          "urgency": "LOW",
+          "category": "MOBILITY_MAINTENANCE",
+          "kateSpeech": "You have 'Annual Car Technical Inspection (Autokeuring) 🚗' scheduled, Thomas.",
+          "insightSummary": "Calendar event: Annual Car Technical Inspection (Autokeuring) 🚗",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Annual Car Technical Inspection (Autokeuring) 🚗",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "thomas_evt_4",
+          "eventTitle": "Ghent Half Marathon 🏃‍♂️",
+          "urgency": "LOW",
+          "category": "SPORTS_EVENT",
+          "kateSpeech": "You have 'Ghent Half Marathon 🏃‍♂️' scheduled, Thomas.",
+          "insightSummary": "Calendar event: Ghent Half Marathon 🏃‍♂️",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Ghent Half Marathon 🏃‍♂️",
+            "detectedTransactions": [
+              "Energy Lab Ghent (€45.00)"
+            ],
+            "financialCommitment": "€45.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "thomas_evt_5",
+          "eventTitle": "Tech Conference London (QCon London) 🇬🇧",
+          "urgency": "HIGH",
+          "category": "INTERNATIONAL_TRAVEL",
+          "kateSpeech": "Hello Thomas, I noticed your upcoming trip to United Kingdom. Let's make sure your currency (GBP) and card access are prepared.",
+          "insightSummary": "Trip to United Kingdom (GBP) • Total commitments: €145.00",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Tech Conference London (QCon London) 🇬🇧 (3 days)",
+            "detectedTransactions": [
+              "No prior bookings detected yet"
+            ],
+            "financialCommitment": "€145.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "€140.0 / day",
+            "paymentHabits": "5% Cash / 95% Card (London is virtually cashless)",
+            "peerBehavior": "79% of Belgian travelers to London hold GBP in multi-currency to avoid dynamic FX fees on transport & contactless. 91% activate UK data roaming packages or use KBC Deals partner eSIMs."
+          },
+          "statusAlerts": [
+            "🛡️ Protection Gap: €145.00 spent on travel with no active KBC Travel Insurance.",
+            "⚠️ Card Gap: Debit card is currently locked for United Kingdom (Non-EU)."
+          ],
+          "suggestedActions": [
+            {
+              "actionId": "act_travel_insurance",
+              "label": "Activate KBC Global Travel Insurance (€18.50/trip)",
+              "type": "INSTANT_INSURANCE",
+              "badge": "Missing Protection"
+            },
+            {
+              "actionId": "act_unlock_card",
+              "label": "1-Tap Unlock Debit Card for United Kingdom",
+              "type": "ONE_CLICK_TOGGLE",
+              "badge": "Crucial Action"
+            },
+            {
+              "actionId": "act_currency_order",
+              "label": "Pre-order GBP Cash or Open GBP Sub-Wallet",
+              "type": "CURRENCY_SERVICE",
+              "badge": "Avoid Airport FX Markup"
+            }
+          ]
+        },
+        {
+          "eventId": "thomas_evt_6",
+          "eventTitle": "Home Telecom & Fiber Contract Renewal 🌐",
+          "urgency": "LOW",
+          "category": "RECURRING_UTILITY",
+          "kateSpeech": "You have 'Home Telecom & Fiber Contract Renewal 🌐' scheduled, Thomas.",
+          "insightSummary": "Calendar event: Home Telecom & Fiber Contract Renewal 🌐",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Home Telecom & Fiber Contract Renewal 🌐",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "user_emma",
+      "name": "Emma Van de Velde",
+      "age": 24,
+      "city": "Leuven",
+      "occupation": "Master Student & Marketer",
+      "segment": "Student / Social & Milestone Stage",
+      "financialSnapshot": {
+        "checkingBalance": 820.4,
+        "savingsBalance": 3400.0,
+        "monthlyIncome": 1150.0,
+        "hasTravelInsurance": false,
+        "cardNonEuActive": false,
+        "currencyWallets": [
+          "EUR"
+        ],
+        "creditCardLimit": 750.0
+      },
+      "transactions": [
+        {
+          "id": "tx_em_201",
+          "date": "2026-09-22T15:40:58.794856",
+          "merchant": "Rooftop Leuven Events BV",
+          "mccCategory": "EVENT_VENUES",
+          "amount": 250.0,
+          "currency": "EUR",
+          "type": "BANCONTACT",
+          "description": "Advance hall & terrace deposit for 25th birthday party",
+          "status": "COMPLETED",
+          "matchedEventId": "emma_evt_1"
+        },
+        {
+          "id": "tx_em_202",
+          "date": "2026-09-16T11:10:58.794856",
+          "merchant": "Ticketmaster Belgium",
+          "mccCategory": "ENTERTAINMENT",
+          "amount": 315.0,
+          "currency": "EUR",
+          "type": "BANCONTACT",
+          "description": "Rock Werchter 2026 Combi 4-Day Ticket + Camping The Hive",
+          "status": "COMPLETED",
+          "matchedEventId": "emma_evt_3"
+        },
+        {
+          "id": "tx_em_203",
+          "date": "2026-09-27T22:00:58.794856",
+          "merchant": "Ryanair DAC",
+          "mccCategory": "AIRLINES",
+          "amount": 89.0,
+          "currency": "EUR",
+          "type": "DEBIT_CARD",
+          "description": "Flights Brussels Charleroi (CRL) - Lisbon (LIS)",
+          "status": "COMPLETED",
+          "matchedEventId": "emma_evt_5"
+        },
+        {
+          "id": "tx_em_204",
+          "date": "2026-09-28T19:30:58.794856",
+          "merchant": "Klimzaal Leuven",
+          "mccCategory": "SPORTS_RECREATION",
+          "amount": 14.5,
+          "currency": "EUR",
+          "type": "PAYCONIQ",
+          "description": "Single entry boulder pass + shoe rental",
+          "status": "COMPLETED",
+          "matchedEventId": "emma_evt_2"
+        }
+      ],
+      "agenda": [
+        {
+          "id": "emma_evt_1",
+          "title": "Emma's 25th Milestone Birthday Celebration! 🎂🎉",
+          "category": "BIRTHDAY_MILESTONE",
+          "frequency": "INFREQUENT_MAJOR",
+          "location": "Leuven Rooftop Lounge, Belgium",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-09T20:00:58.794856",
+          "endDate": "2026-10-10T02:00:58.794856",
+          "durationDays": 1,
+          "participants": [
+            "emma.vdv@student.kuleuven.be",
+            "18 friends on guestlist..."
+          ],
+          "notes": "Turning 25! Venue deposit €250 paid. Total estimated drinks/tapas budget €450. Shared pot needed."
+        },
+        {
+          "id": "emma_evt_2",
+          "title": "Weekly Bouldering & Padel Session 🧗‍♀️",
+          "category": "HEALTH_FITNESS",
+          "frequency": "FREQUENT_WEEKLY",
+          "location": "Klimzaal Leuven",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-02T18:00:58.794856",
+          "endDate": "2026-10-02T20:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "emma.vdv@student.kuleuven.be",
+            "charlotte.b@gmail.com"
+          ],
+          "notes": "10-entry card empty, renewing monthly student membership (€55/mo)."
+        },
+        {
+          "id": "emma_evt_3",
+          "title": "Rock Werchter Music Festival 🎸⛺",
+          "category": "FESTIVAL_ENTERTAINMENT",
+          "frequency": "ANNUAL",
+          "location": "Festivalpark Werchter, Belgium",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-11-14T12:00:58.794856",
+          "endDate": "2026-11-18T12:00:58.794856",
+          "durationDays": 4,
+          "participants": [
+            "emma.vdv@student.kuleuven.be",
+            "simon.k@gmail.com",
+            "noor.p@telenet.be"
+          ],
+          "notes": "4 days of camping with 3 friends. Shared supplies + need safe daily contactless cap."
+        },
+        {
+          "id": "emma_evt_4",
+          "title": "Master Thesis Graduation Ceremony & Gala 🎓",
+          "category": "EDUCATION_GRADUATION",
+          "frequency": "RARE_MILESTONE",
+          "location": "University Hall, KU Leuven",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-12-09T15:00:58.794856",
+          "endDate": "2026-12-09T23:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "emma.vdv@student.kuleuven.be",
+            "parents.vdv@telenet.be"
+          ],
+          "notes": "Official graduation. Transitioning from KBC Student Account to KBC Plus Account for starters."
+        },
+        {
+          "id": "emma_evt_5",
+          "title": "City Trip: Lisbon Long Weekend 🇵🇹☀️",
+          "category": "EUROPEAN_TRAVEL",
+          "frequency": "INFREQUENT",
+          "location": "Lisbon, Portugal",
+          "country": "PT",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-25T06:30:58.794856",
+          "endDate": "2026-10-29T21:00:58.794856",
+          "durationDays": 4,
+          "participants": [
+            "emma.vdv@student.kuleuven.be",
+            "charlotte.b@gmail.com"
+          ],
+          "notes": "Ryanair flight. Need flight delay protection and Booking.com KBC Deals cashbacks."
+        },
+        {
+          "id": "emma_evt_6",
+          "title": "Apartment Rental Handover & Keys (Antwerp Starter Flat) 🔑",
+          "category": "HOUSING_RENTAL",
+          "frequency": "RARE_MILESTONE",
+          "location": "Zuid, Antwerp, Belgium",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-12-24T11:00:58.794856",
+          "endDate": "2026-12-24T13:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "emma.vdv@student.kuleuven.be",
+            "landlord@immo-antwerp.be"
+          ],
+          "notes": "Setting up KBC Rental Deposit (Huurwaarborg - €1,900) & mandatory tenant fire insurance."
+        }
+      ],
+      "generatedRecommendations": [
+        {
+          "eventId": "emma_evt_1",
+          "eventTitle": "Emma's 25th Milestone Birthday Celebration! 🎂🎉",
+          "urgency": "HIGH",
+          "category": "BIRTHDAY_MILESTONE",
+          "kateSpeech": "Happy early 25th birthday, Emma! I noticed your €250 venue deposit at Rooftop Leuven Events BV. Would you like me to open a KBC Digital Group Pot to collect contributions from your guests?",
+          "insightSummary": "25th Birthday Milestone • Venue deposit confirmed.",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Emma's 25th Milestone Birthday Celebration! 🎂🎉",
+            "detectedTransactions": [
+              "Venue deposit paid: Rooftop Leuven Events BV (€250.00)"
+            ],
+            "financialCommitment": "€250.00 spent so far"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "€380.0 avg celebration buffer",
+            "peerBehavior": "79% of 20-30yo KBC customers create a KBC 'Group Pot' (Cadeaupot) for sharing party costs and group gifts."
+          },
+          "statusAlerts": [
+            "Checking balance: €820.40. Suggested guest pool: €25/person via Payconiq."
+          ],
+          "suggestedActions": [
+            {
+              "actionId": "act_create_birthday_pot",
+              "label": "Generate KBC Payconiq Group Pot (€450 Goal)",
+              "type": "CREATE_GROUP_POT",
+              "badge": "79% of Peers Use This"
+            },
+            {
+              "actionId": "act_catering_cashback",
+              "label": "Unlock Local Leuven Catering Deals (8% Cashback)",
+              "type": "CLAIM_DEAL",
+              "badge": "KBC Deals"
+            }
+          ]
+        },
+        {
+          "eventId": "emma_evt_2",
+          "eventTitle": "Weekly Bouldering & Padel Session 🧗‍♀️",
+          "urgency": "LOW",
+          "category": "HEALTH_FITNESS",
+          "kateSpeech": "You have 'Weekly Bouldering & Padel Session 🧗‍♀️' scheduled, Emma.",
+          "insightSummary": "Calendar event: Weekly Bouldering & Padel Session 🧗‍♀️",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Weekly Bouldering & Padel Session 🧗‍♀️",
+            "detectedTransactions": [
+              "Klimzaal Leuven (€14.50)"
+            ],
+            "financialCommitment": "€14.50"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "emma_evt_3",
+          "eventTitle": "Rock Werchter Music Festival 🎸⛺",
+          "urgency": "MEDIUM",
+          "category": "FESTIVAL_ENTERTAINMENT",
+          "kateSpeech": "I see your Rock Werchter ticket purchase with Ticketmaster Belgium, Emma! Let's set up a camping expense split with your friends and turn on an €80/day contactless spending shield.",
+          "insightSummary": "Rock Werchter 4-Day Festival • Ticket confirmed.",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Rock Werchter Music Festival 🎸⛺",
+            "detectedTransactions": [
+              "Ticket detected: Ticketmaster Belgium (€315.00)"
+            ],
+            "financialCommitment": "€315.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "€310.0 avg festival weekend",
+            "peerBehavior": "88% set a temporary daily ATM limit to avoid overspending at festival grounds."
+          },
+          "statusAlerts": [
+            "Proactive fraud & loss protection active."
+          ],
+          "suggestedActions": [
+            {
+              "actionId": "act_camping_split",
+              "label": "Create Shared Camping Expense Group with 3 Friends",
+              "type": "EXPENSE_SPLIT",
+              "badge": "Smart Split"
+            },
+            {
+              "actionId": "act_festival_safe_cap",
+              "label": "Enable €80/day Contactless Festival Shield",
+              "type": "BUDGET_CAP",
+              "badge": "Safety Feature"
+            }
+          ]
+        },
+        {
+          "eventId": "emma_evt_4",
+          "eventTitle": "Master Thesis Graduation Ceremony & Gala 🎓",
+          "urgency": "LOW",
+          "category": "EDUCATION_GRADUATION",
+          "kateSpeech": "You have 'Master Thesis Graduation Ceremony & Gala 🎓' scheduled, Emma.",
+          "insightSummary": "Calendar event: Master Thesis Graduation Ceremony & Gala 🎓",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Master Thesis Graduation Ceremony & Gala 🎓",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "emma_evt_5",
+          "eventTitle": "City Trip: Lisbon Long Weekend 🇵🇹☀️",
+          "urgency": "MEDIUM",
+          "category": "EUROPEAN_TRAVEL",
+          "kateSpeech": "Enjoy your trip to Portugal, Emma! I noticed your Ryanair DAC booking and prepared your credit limit and cashback settings.",
+          "insightSummary": "Trip to Portugal • Bookings detected: €89.00",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: City Trip: Lisbon Long Weekend 🇵🇹☀️",
+            "detectedTransactions": [
+              "Booking: Ryanair DAC (€89.00)"
+            ],
+            "financialCommitment": "€89.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "€75.0 / day",
+            "peerBehavior": "94% use KBC Deals for 4-8% cashback on Booking.com & Ryanair car rentals. 62% activate automatic Flight Delay Instant Compensation."
+          },
+          "statusAlerts": [
+            "Eurozone transactions active with zero foreign exchange fees."
+          ],
+          "suggestedActions": [
+            {
+              "actionId": "act_kbc_deals_travel",
+              "label": "Activate KBC Deals (4-8% Cashback on Booking.com & Airlines)",
+              "type": "CLAIM_DEAL",
+              "badge": "Instant Cashback"
+            }
+          ]
+        },
+        {
+          "eventId": "emma_evt_6",
+          "eventTitle": "Apartment Rental Handover & Keys (Antwerp Starter Flat) 🔑",
+          "urgency": "LOW",
+          "category": "HOUSING_RENTAL",
+          "kateSpeech": "You have 'Apartment Rental Handover & Keys (Antwerp Starter Flat) 🔑' scheduled, Emma.",
+          "insightSummary": "Calendar event: Apartment Rental Handover & Keys (Antwerp Starter Flat) 🔑",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Apartment Rental Handover & Keys (Antwerp Starter Flat) 🔑",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "user_lucas",
+      "name": "Lucas & Sophie Peeters",
+      "age": 36,
+      "city": "Mechelen",
+      "occupation": "Senior Product Lead & Architect",
+      "segment": "Family / High Income & Big Milestones",
+      "financialSnapshot": {
+        "checkingBalance": 6250.0,
+        "savingsBalance": 54000.0,
+        "monthlyIncome": 5800.0,
+        "hasTravelInsurance": true,
+        "cardNonEuActive": true,
+        "currencyWallets": [
+          "EUR",
+          "USD"
+        ],
+        "creditCardLimit": 5000.0
+      },
+      "transactions": [
+        {
+          "id": "tx_lu_301",
+          "date": "2026-09-25T10:15:58.794856",
+          "merchant": "Notarisassociatie Van Damme",
+          "mccCategory": "LEGAL_SERVICES",
+          "amount": 5000.0,
+          "currency": "EUR",
+          "type": "WIRE_TRANSFER",
+          "description": "Advance escrow compromis security deposit for house acquisition",
+          "status": "COMPLETED",
+          "matchedEventId": "lucas_evt_1"
+        },
+        {
+          "id": "tx_lu_302",
+          "date": "2026-09-18T18:20:58.794856",
+          "merchant": "Engie Home Services Belgium",
+          "mccCategory": "UTILITIES_ENERGY",
+          "amount": 120.0,
+          "currency": "EUR",
+          "type": "BANCONTACT",
+          "description": "Pre-renovation EPC & Heat Pump Feasibility Diagnostic",
+          "status": "COMPLETED",
+          "matchedEventId": "lucas_evt_4"
+        },
+        {
+          "id": "tx_lu_303",
+          "date": "2026-09-15T13:45:58.794856",
+          "merchant": "Swiss Federal Railways (SBB/CFF/FFS)",
+          "mccCategory": "RAILWAYS",
+          "amount": 260.0,
+          "currency": "EUR",
+          "type": "CREDIT_CARD",
+          "description": "Jungfrau Railway Mountain Excursion Family Pass",
+          "status": "COMPLETED",
+          "matchedEventId": "lucas_evt_3"
+        }
+      ],
+      "agenda": [
+        {
+          "id": "lucas_evt_1",
+          "title": "Notary Deed Signing: New House Purchase 🏡✍️",
+          "category": "HOME_PURCHASE_NOTARY",
+          "frequency": "RARE_MILESTONE",
+          "location": "Notary Office Van Damme, Mechelen, Belgium",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-18T14:00:58.794856",
+          "endDate": "2026-10-18T16:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "lucas.peeters@telenet.be",
+            "sophie.p@gmail.com",
+            "notaris.vandamme@notaris.be"
+          ],
+          "notes": "Final deed signing for 1930s townhouse. Transfer €48,000 downpayment & notary fees via escrow."
+        },
+        {
+          "id": "lucas_evt_2",
+          "title": "Youth Football Tournament - Noah (KV Mechelen U10) ⚽",
+          "category": "FAMILY_ROUTINE",
+          "frequency": "FREQUENT_WEEKLY",
+          "location": "KV Mechelen Jeugdcomplex",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-04T09:30:58.794856",
+          "endDate": "2026-10-04T12:30:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "lucas.peeters@telenet.be",
+            "coach.karl@kvmechelen.be"
+          ],
+          "notes": "Weekly match + snacks carpool. Noah's sports insurance card verification."
+        },
+        {
+          "id": "lucas_evt_3",
+          "title": "Family Summer Vacation: Swiss Alps Roadtrip 🇨🇭🏔️",
+          "category": "INTERNATIONAL_TRAVEL",
+          "frequency": "ANNUAL",
+          "location": "Interlaken & Zermatt, Switzerland",
+          "country": "CH",
+          "destinationCurrency": "CHF",
+          "isNonEurozone": true,
+          "startDate": "2026-11-29T06:00:58.794856",
+          "endDate": "2026-12-13T20:00:58.794856",
+          "durationDays": 14,
+          "participants": [
+            "lucas.peeters@telenet.be",
+            "sophie.p@gmail.com",
+            "noah.p@family.be",
+            "emma.p@family.be"
+          ],
+          "notes": "Family road trip. Swiss highway e-Vignette required. Need CHF sub-wallet to avoid foreign exchange markups."
+        },
+        {
+          "id": "lucas_evt_4",
+          "title": "Solar Panels & Heat Pump Site Audit ☀️🔋",
+          "category": "SUSTAINABILITY_INVESTMENT",
+          "frequency": "INFREQUENT",
+          "location": "New House, Mechelen",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-30T10:00:58.794856",
+          "endDate": "2026-10-30T12:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "lucas.peeters@telenet.be",
+            "solar-expert@engie.be"
+          ],
+          "notes": "Contractor quote: €16,500. Explore KBC Green Energy Loan (preferential rate 2.99%) & Flemish subsidies."
+        },
+        {
+          "id": "lucas_evt_5",
+          "title": "Kids Orthodontist & Dental Checkup 🦷",
+          "category": "HEALTH_MEDICAL",
+          "frequency": "SEMI_ANNUAL",
+          "location": "Dental Clinic Mechelen",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-15T16:30:58.794856",
+          "endDate": "2026-10-15T17:30:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "sophie.p@gmail.com"
+          ],
+          "notes": "Braces quote for Noah approx €2,400. Check KBC Dentalia Plus supplementary reimbursement."
+        },
+        {
+          "id": "lucas_evt_6",
+          "title": "Year-End Pension Savings Tax Optimization 📈",
+          "category": "TAX_INVESTMENT",
+          "frequency": "ANNUAL",
+          "location": "KBC Bank Mechelen Branch (Online)",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-11-09T11:00:58.794856",
+          "endDate": "2026-11-09T11:45:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "lucas.peeters@telenet.be",
+            "kbc.advisor@kbc.be"
+          ],
+          "notes": "Max out annual Belgian tax ceiling (€1,020 at 30% or €1,310 at 25% tax reduction for both partners)."
+        }
+      ],
+      "generatedRecommendations": [
+        {
+          "eventId": "lucas_evt_1",
+          "eventTitle": "Notary Deed Signing: New House Purchase 🏡✍️",
+          "urgency": "CRITICAL",
+          "category": "HOME_PURCHASE_NOTARY",
+          "kateSpeech": "I see your €5,000 compromise transfer to Notaris Van Damme, Lucas. For the upcoming deed signing, let's pre-authorize your 1-day wire limit for the remaining balance and shelter your renovation buffer.",
+          "insightSummary": "Notary Deed Signing • €5,000 initial escrow detected.",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Notary Deed Signing: New House Purchase 🏡✍️",
+            "detectedTransactions": [
+              "Escrow downpayment advance: Notarisassociatie Van Damme (€5,000.00)"
+            ],
+            "financialCommitment": "€5,000.00 advance paid"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "€18,500 avg renovation buffer",
+            "peerBehavior": "91% of buyers open a dedicated KBC Renovation Savings Account with automated contractor invoice validation."
+          },
+          "statusAlerts": [
+            "Mandatory: Remaining escrow must be wired 48h prior to deed signing."
+          ],
+          "suggestedActions": [
+            {
+              "actionId": "act_wire_transfer_limit",
+              "label": "Authorize 1-Day Wire Limit Increase for Final Escrow",
+              "type": "INCREASE_LIMIT",
+              "badge": "Required Step"
+            },
+            {
+              "actionId": "act_open_renovation_account",
+              "label": "Open KBC Renovation Buffer Account (Preferential Rate)",
+              "type": "OPEN_SUB_ACCOUNT",
+              "badge": "Tax & Interest Benefit"
+            }
+          ]
+        },
+        {
+          "eventId": "lucas_evt_2",
+          "eventTitle": "Youth Football Tournament - Noah (KV Mechelen U10) ⚽",
+          "urgency": "LOW",
+          "category": "FAMILY_ROUTINE",
+          "kateSpeech": "You have 'Youth Football Tournament - Noah (KV Mechelen U10) ⚽' scheduled, Lucas.",
+          "insightSummary": "Calendar event: Youth Football Tournament - Noah (KV Mechelen U10) ⚽",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Youth Football Tournament - Noah (KV Mechelen U10) ⚽",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "lucas_evt_3",
+          "eventTitle": "Family Summer Vacation: Swiss Alps Roadtrip 🇨🇭🏔️",
+          "urgency": "HIGH",
+          "category": "INTERNATIONAL_TRAVEL",
+          "kateSpeech": "Hello Lucas, I noticed your upcoming trip to Switzerland. Let's make sure your currency (CHF) and card access are prepared.",
+          "insightSummary": "Trip to Switzerland (CHF) • Total commitments: €260.00",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Family Summer Vacation: Swiss Alps Roadtrip 🇨🇭🏔️ (14 days)",
+            "detectedTransactions": [
+              "No prior bookings detected yet"
+            ],
+            "financialCommitment": "€260.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "€160.0 / day",
+            "paymentHabits": "10% Cash / 90% Card",
+            "peerBehavior": "74% buy the Swiss e-Vignette directly via KBC Deals/Mobility tab. 81% utilize KBC multi-currency live conversion to lock in favorable exchange rates."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_currency_order",
+              "label": "Pre-order CHF Cash or Open CHF Sub-Wallet",
+              "type": "CURRENCY_SERVICE",
+              "badge": "Avoid Airport FX Markup"
+            },
+            {
+              "actionId": "act_swiss_vignette",
+              "label": "Purchase Swiss Highway e-Vignette (€42)",
+              "type": "MOBILITY_PURCHASE",
+              "badge": "KBC Mobility"
+            }
+          ]
+        },
+        {
+          "eventId": "lucas_evt_4",
+          "eventTitle": "Solar Panels & Heat Pump Site Audit ☀️🔋",
+          "urgency": "LOW",
+          "category": "SUSTAINABILITY_INVESTMENT",
+          "kateSpeech": "You have 'Solar Panels & Heat Pump Site Audit ☀️🔋' scheduled, Lucas.",
+          "insightSummary": "Calendar event: Solar Panels & Heat Pump Site Audit ☀️🔋",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Solar Panels & Heat Pump Site Audit ☀️🔋",
+            "detectedTransactions": [
+              "Engie Home Services Belgium (€120.00)"
+            ],
+            "financialCommitment": "€120.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "lucas_evt_5",
+          "eventTitle": "Kids Orthodontist & Dental Checkup 🦷",
+          "urgency": "LOW",
+          "category": "HEALTH_MEDICAL",
+          "kateSpeech": "You have 'Kids Orthodontist & Dental Checkup 🦷' scheduled, Lucas.",
+          "insightSummary": "Calendar event: Kids Orthodontist & Dental Checkup 🦷",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Kids Orthodontist & Dental Checkup 🦷",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "lucas_evt_6",
+          "eventTitle": "Year-End Pension Savings Tax Optimization 📈",
+          "urgency": "LOW",
+          "category": "TAX_INVESTMENT",
+          "kateSpeech": "You have 'Year-End Pension Savings Tax Optimization 📈' scheduled, Lucas.",
+          "insightSummary": "Calendar event: Year-End Pension Savings Tax Optimization 📈",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Year-End Pension Savings Tax Optimization 📈",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "user_marc",
+      "name": "Marc Verhoeven",
+      "age": 58,
+      "city": "Hasselt",
+      "occupation": "SME Managing Director",
+      "segment": "Business Owner / Wealth & Pre-Retirement",
+      "financialSnapshot": {
+        "checkingBalance": 12800.0,
+        "savingsBalance": 142000.0,
+        "monthlyIncome": 7200.0,
+        "hasTravelInsurance": true,
+        "cardNonEuActive": true,
+        "currencyWallets": [
+          "EUR",
+          "USD",
+          "GBP"
+        ],
+        "creditCardLimit": 10000.0
+      },
+      "transactions": [
+        {
+          "id": "tx_ma_401",
+          "date": "2026-09-23T11:30:58.794856",
+          "merchant": "Olympic Yachting Athens Ltd",
+          "mccCategory": "TRAVEL_CHARTER",
+          "amount": 1450.0,
+          "currency": "EUR",
+          "type": "CREDIT_CARD",
+          "description": "50% advance charter deposit for Bavaria 46 Cruiser",
+          "status": "COMPLETED",
+          "matchedEventId": "marc_evt_3"
+        },
+        {
+          "id": "tx_ma_402",
+          "date": "2026-09-27T14:00:58.794856",
+          "merchant": "BMW Financial Services Belgium",
+          "mccCategory": "AUTOMOTIVE",
+          "amount": 4250.0,
+          "currency": "EUR",
+          "type": "DIRECT_DEBIT",
+          "description": "Initial advance payment for KBC Autolease BMW iX3 contract",
+          "status": "COMPLETED",
+          "matchedEventId": "marc_evt_5"
+        },
+        {
+          "id": "tx_ma_403",
+          "date": "2026-09-10T09:15:58.794856",
+          "merchant": "BDO Belgium Hasselt",
+          "mccCategory": "ACCOUNTING_LEGAL",
+          "amount": 850.0,
+          "currency": "EUR",
+          "type": "WIRE_TRANSFER",
+          "description": "Quarterly fiscal closing and corporate income tax prep",
+          "status": "COMPLETED",
+          "matchedEventId": "marc_evt_1"
+        }
+      ],
+      "agenda": [
+        {
+          "id": "marc_evt_1",
+          "title": "Quarterly Corporate VAT & Tax Review with Accountant 📊",
+          "category": "BUSINESS_TAX",
+          "frequency": "FREQUENT_QUARTERLY",
+          "location": "BDO Accountants Hasselt",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-11T10:00:58.794856",
+          "endDate": "2026-10-11T12:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "marc.verhoeven@verhoeven-bv.be",
+            "accountant@bdo.be"
+          ],
+          "notes": "Prepare quarterly corporate tax reserve transfer (€32,000) from business to tax buffer."
+        },
+        {
+          "id": "marc_evt_2",
+          "title": "Sunday Golf Match & Limburg Club Cup ⛳",
+          "category": "SPORTS_LEISURE",
+          "frequency": "FREQUENT_WEEKLY",
+          "location": "Flanders Nippon Golf Hasselt",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-05T10:00:58.794856",
+          "endDate": "2026-10-05T15:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "marc.verhoeven@gmail.com",
+            "golf-friends@hasselt.be"
+          ],
+          "notes": "Club membership renewal due next week (€1,850/yr). Review KBC Family Liability Insurance."
+        },
+        {
+          "id": "marc_evt_3",
+          "title": "Sailing Holiday: Greek Islands Yacht Charter 🇬🇷⛵",
+          "category": "EUROPEAN_TRAVEL",
+          "frequency": "ANNUAL",
+          "location": "Athens Marina & Cyclades, Greece",
+          "country": "GR",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-11-07T08:00:58.794856",
+          "endDate": "2026-11-17T18:00:58.794856",
+          "durationDays": 10,
+          "participants": [
+            "marc.verhoeven@gmail.com",
+            "an.verhoeven@telenet.be"
+          ],
+          "notes": "Bavaria 46 charter. Security deposit hold of €3,000 on credit card needed."
+        },
+        {
+          "id": "marc_evt_4",
+          "title": "Granddaughter Julie's 1st Birthday 🎀👶",
+          "category": "FAMILY_MILESTONE",
+          "frequency": "RARE_MILESTONE",
+          "location": "Family Home, Genk",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-16T14:00:58.794856",
+          "endDate": "2026-10-16T19:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "marc.verhoeven@gmail.com",
+            "claire.verhoeven@gmail.com"
+          ],
+          "notes": "Setting up a monthly automatic KBC Junior Investment Plan (€100/mo) for Julie's 18th future fund."
+        },
+        {
+          "id": "marc_evt_5",
+          "title": "Delivery of New Hybrid Company Car (KBC Autolease) 🚙",
+          "category": "MOBILITY_MAINTENANCE",
+          "frequency": "RARE_MILESTONE",
+          "location": "BMW Dealer Hasselt",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-22T14:30:58.794856",
+          "endDate": "2026-10-22T16:00:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "marc.verhoeven@verhoeven-bv.be",
+            "kbc-autolease@kbc.be"
+          ],
+          "notes": "Key handover for BMW iX3. Activate KBC Mobility fuel & charging card in KBC Mobile."
+        },
+        {
+          "id": "marc_evt_6",
+          "title": "Knee Arthroscopy Preventive Consultation 🏥",
+          "category": "HEALTH_MEDICAL",
+          "frequency": "INFREQUENT",
+          "location": "Jessa Ziekenhuis Hasselt",
+          "country": "BE",
+          "destinationCurrency": "EUR",
+          "isNonEurozone": false,
+          "startDate": "2026-10-29T09:00:58.794856",
+          "endDate": "2026-10-29T10:30:58.794856",
+          "durationDays": 0,
+          "participants": [
+            "marc.verhoeven@gmail.com"
+          ],
+          "notes": "Day surgery scheduled. Register admission via KBC Mobile Hospitalization Medi-Assistance for direct third-party payment."
+        }
+      ],
+      "generatedRecommendations": [
+        {
+          "eventId": "marc_evt_1",
+          "eventTitle": "Quarterly Corporate VAT & Tax Review with Accountant 📊",
+          "urgency": "LOW",
+          "category": "BUSINESS_TAX",
+          "kateSpeech": "You have 'Quarterly Corporate VAT & Tax Review with Accountant 📊' scheduled, Marc.",
+          "insightSummary": "Calendar event: Quarterly Corporate VAT & Tax Review with Accountant 📊",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Quarterly Corporate VAT & Tax Review with Accountant 📊",
+            "detectedTransactions": [
+              "BDO Belgium Hasselt (€850.00)"
+            ],
+            "financialCommitment": "€850.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "marc_evt_2",
+          "eventTitle": "Sunday Golf Match & Limburg Club Cup ⛳",
+          "urgency": "LOW",
+          "category": "SPORTS_LEISURE",
+          "kateSpeech": "You have 'Sunday Golf Match & Limburg Club Cup ⛳' scheduled, Marc.",
+          "insightSummary": "Calendar event: Sunday Golf Match & Limburg Club Cup ⛳",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Sunday Golf Match & Limburg Club Cup ⛳",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "marc_evt_3",
+          "eventTitle": "Sailing Holiday: Greek Islands Yacht Charter 🇬🇷⛵",
+          "urgency": "MEDIUM",
+          "category": "EUROPEAN_TRAVEL",
+          "kateSpeech": "Enjoy your trip to Greece, Marc! I noticed your Olympic Yachting Athens Ltd booking and prepared your credit limit and cashback settings.",
+          "insightSummary": "Trip to Greece • Bookings detected: €1,450.00",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Sailing Holiday: Greek Islands Yacht Charter 🇬🇷⛵",
+            "detectedTransactions": [
+              "Booking: Olympic Yachting Athens Ltd (€1,450.00)"
+            ],
+            "financialCommitment": "€1,450.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "€130.0 / day",
+            "peerBehavior": "83% of yacht charterers temporarily raise credit card limits by €2,500 for marina security deposits. 89% verify maritime assistance coverage under KBC Family Insurance."
+          },
+          "statusAlerts": [
+            "Eurozone transactions active with zero foreign exchange fees."
+          ],
+          "suggestedActions": [
+            {
+              "actionId": "act_kbc_deals_travel",
+              "label": "Activate KBC Deals (4-8% Cashback on Booking.com & Airlines)",
+              "type": "CLAIM_DEAL",
+              "badge": "Instant Cashback"
+            },
+            {
+              "actionId": "act_credit_limit_raise",
+              "label": "Temporarily Increase Credit Card Limit (+€3,000 for Yacht Deposit)",
+              "type": "INCREASE_LIMIT",
+              "badge": "Security Deposit Hold"
+            }
+          ]
+        },
+        {
+          "eventId": "marc_evt_4",
+          "eventTitle": "Granddaughter Julie's 1st Birthday 🎀👶",
+          "urgency": "LOW",
+          "category": "FAMILY_MILESTONE",
+          "kateSpeech": "You have 'Granddaughter Julie's 1st Birthday 🎀👶' scheduled, Marc.",
+          "insightSummary": "Calendar event: Granddaughter Julie's 1st Birthday 🎀👶",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Granddaughter Julie's 1st Birthday 🎀👶",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "marc_evt_5",
+          "eventTitle": "Delivery of New Hybrid Company Car (KBC Autolease) 🚙",
+          "urgency": "LOW",
+          "category": "MOBILITY_MAINTENANCE",
+          "kateSpeech": "You have 'Delivery of New Hybrid Company Car (KBC Autolease) 🚙' scheduled, Marc.",
+          "insightSummary": "Calendar event: Delivery of New Hybrid Company Car (KBC Autolease) 🚙",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Delivery of New Hybrid Company Car (KBC Autolease) 🚙",
+            "detectedTransactions": [
+              "BMW Financial Services Belgium (€4,250.00)"
+            ],
+            "financialCommitment": "€4,250.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        },
+        {
+          "eventId": "marc_evt_6",
+          "eventTitle": "Knee Arthroscopy Preventive Consultation 🏥",
+          "urgency": "LOW",
+          "category": "HEALTH_MEDICAL",
+          "kateSpeech": "You have 'Knee Arthroscopy Preventive Consultation 🏥' scheduled, Marc.",
+          "insightSummary": "Calendar event: Knee Arthroscopy Preventive Consultation 🏥",
+          "dualSignalProof": {
+            "calendarEvent": "Calendar: Knee Arthroscopy Preventive Consultation 🏥",
+            "detectedTransactions": [
+              "No direct transaction match"
+            ],
+            "financialCommitment": "€0.00"
+          },
+          "communityBenchmark": {
+            "avgDailySpend": "Standard",
+            "peerBehavior": "KBC LifeSync tracks your financial calendar seamlessly."
+          },
+          "statusAlerts": [],
+          "suggestedActions": [
+            {
+              "actionId": "act_quick_split",
+              "label": "Open KBC Quick Split / Payconiq",
+              "type": "P2P_SPLIT",
+              "badge": "Instant"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
