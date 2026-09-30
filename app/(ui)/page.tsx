@@ -27,11 +27,8 @@ export default function UpcomingPage() {
   return (
     <AppShell>
       <div className="max-w-2xl">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Upcoming</h1>
-        <p className="mt-1 text-sm text-zinc-600">
-          Moments we found in your <Link href="/calendar" className="text-brand-600 hover:underline">calendar</Link> and
-          payments, prepared with what similar customers spent and forgot.
-        </p>
+        <h1 className="text-3xl font-semibold tracking-tight text-zinc-900">Your next months</h1>
+        <p className="mt-1 text-zinc-600">What&apos;s coming up, and what people like you wish they&apos;d known.</p>
       </div>
 
       <TellKbc onAdded={load} />
@@ -105,7 +102,7 @@ function TellKbc({ onAdded }: { onAdded: () => void }) {
   return (
     <form onSubmit={submit} className="mt-6 max-w-2xl">
       <label htmlFor="tell" className="text-sm font-medium text-zinc-900">
-        Something coming up that we can&apos;t see?
+        Anything else coming up?
       </label>
       <div className="mt-2 flex gap-2">
         <input
@@ -116,7 +113,7 @@ function TellKbc({ onAdded }: { onAdded: () => void }) {
             setText(e.target.value);
             if (status.kind !== "busy") setStatus({ kind: "idle" });
           }}
-          placeholder="For example: we're renovating the kitchen in spring"
+          placeholder="We're renovating the kitchen in spring"
           className="h-10 flex-1 rounded-lg border border-zinc-300 bg-white px-3 text-sm placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none"
         />
         <button
