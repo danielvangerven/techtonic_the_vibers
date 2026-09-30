@@ -13,6 +13,7 @@ export const DEMO_USERS = [
 const NAV = [
   { href: "/", label: "Upcoming" },
   { href: "/calendar", label: "Calendar" },
+  { href: "/transactions", label: "Transactions" },
 ];
 
 export async function login(id: string, password: string): Promise<string | null> {

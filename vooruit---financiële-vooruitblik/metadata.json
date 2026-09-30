@@ -1,0 +1,6 @@
+{
+  "name": "Vooruit - Financiële Vooruitblik",
+  "description": "Zelfstandig prototype van een persoonlijke financiële assistent die komende kosten voorspelt op basis van agenda, gewoontes en vaste lasten.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
