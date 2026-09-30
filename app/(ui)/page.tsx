@@ -5,17 +5,26 @@ import Link from "next/link";
 import MomentCard from "@/components/MomentCard";
 import type { MomentView } from "@/lib/types";
 
+// Synthetic demo accounts, for one-click switching in the demo.
+const DEMO_PASSWORDS: Record<string, string> = { thomas: "tokyo2026", lucas: "mechelen2026" };
+
 export default function TimelinePage() {
   const [moments, setMoments] = useState<MomentView[]>([]);
   const [loading, setLoading] = useState(true);
   const [tellText, setTellText] = useState("");
   const [submittingTell, setSubmittingTell] = useState(false);
   const [importingCal, setImportingCal] = useState(false);
-  const [currentUser, setCurrentUser] = useState("Thomas Dubois");
+  const [currentUser, setCurrentUser] = useState("");
 
   const loadTimeline = async () => {
     try {
       const res = await fetch("/api/timeline");
+      if (res.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
+      const me = await fetch("/api/me");
+      if (me.ok) setCurrentUser((await me.json()).name);
       if (res.ok) {
         const data = await res.json();
         setMoments(data);
@@ -83,9 +92,8 @@ export default function TimelinePage() {
     await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username }),
+      body: JSON.stringify({ username, password: DEMO_PASSWORDS[username] }),
     });
-    setCurrentUser(username.charAt(0).toUpperCase() + username.slice(1));
     await loadTimeline();
   };
 
@@ -119,22 +127,10 @@ export default function TimelinePage() {
               🇯🇵 Thomas (Tokyo)
             </button>
             <button
-              onClick={() => switchUser("emma")}
-              className="px-2 py-0.5 rounded-full bg-white/15 hover:bg-white/30 transition shrink-0"
-            >
-              🎂 Emma (25th)
-            </button>
-            <button
               onClick={() => switchUser("lucas")}
               className="px-2 py-0.5 rounded-full bg-white/15 hover:bg-white/30 transition shrink-0"
             >
               🏡 Lucas (House)
-            </button>
-            <button
-              onClick={() => switchUser("marc")}
-              className="px-2 py-0.5 rounded-full bg-white/15 hover:bg-white/30 transition shrink-0"
-            >
-              ⛵ Marc (Yacht)
             </button>
           </div>
 

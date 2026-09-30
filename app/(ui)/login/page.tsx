@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 const PERSONAS = [
   {
     id: "thomas",
+    password: "tokyo2026",
     name: "Thomas Dubois",
     role: "Young Professional (28)",
     city: "Ghent",
@@ -15,17 +16,8 @@ const PERSONAS = [
     signals: "ANA Flight €1,150 + Airbnb €840",
   },
   {
-    id: "emma",
-    name: "Emma Van de Velde",
-    role: "Master Student (24)",
-    city: "Leuven",
-    avatar: "👩‍🎓",
-    badge: "Milestones & Social",
-    headline: "25th Birthday Bash 🎂 + Lisbon Trip + Starter Flat",
-    signals: "Rooftop deposit €250 + Rock Werchter €315",
-  },
-  {
     id: "lucas",
+    password: "mechelen2026",
     name: "Lucas & Sophie Peeters",
     role: "Senior Family (36)",
     city: "Mechelen",
@@ -34,32 +26,23 @@ const PERSONAS = [
     headline: "Notary Deed Signing ✍️ + Swiss Alps Roadtrip 🇨🇭",
     signals: "Notary escrow deposit €5,000",
   },
-  {
-    id: "marc",
-    name: "Marc Verhoeven",
-    role: "SME Managing Director (58)",
-    city: "Hasselt",
-    avatar: "⛵",
-    badge: "Wealth & Corporate",
-    headline: "Greek Islands Yacht Charter 🇬🇷 + Granddaughter 1st Birthday",
-    signals: "Olympic Yachting charter advance €1,450",
-  },
 ];
 
 export default function LoginPage() {
   const router = useRouter();
   const [customUser, setCustomUser] = useState("");
+  const [customPassword, setCustomPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = async (username: string) => {
+  const handleLogin = async (username: string, password: string) => {
     setLoading(true);
     setError("");
     try {
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (!res.ok) {
@@ -98,7 +81,7 @@ export default function LoginPage() {
               {PERSONAS.map((p) => (
                 <button
                   key={p.id}
-                  onClick={() => handleLogin(p.id)}
+                  onClick={() => handleLogin(p.id, p.password)}
                   disabled={loading}
                   className="w-full text-left p-3.5 rounded-2xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 transition-all duration-150 flex items-start space-x-3.5 group cursor-pointer shadow-xs active:scale-98"
                 >
@@ -135,7 +118,7 @@ export default function LoginPage() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (customUser) handleLogin(customUser);
+                if (customUser) handleLogin(customUser, customPassword);
               }}
               className="flex gap-2"
             >
@@ -143,7 +126,14 @@ export default function LoginPage() {
                 type="text"
                 value={customUser}
                 onChange={(e) => setCustomUser(e.target.value)}
-                placeholder="Or enter name (e.g. lotte, tom)"
+                placeholder="Username"
+                className="flex-1 px-3.5 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+              />
+              <input
+                type="password"
+                value={customPassword}
+                onChange={(e) => setCustomPassword(e.target.value)}
+                placeholder="Password"
                 className="flex-1 px-3.5 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
               />
               <button

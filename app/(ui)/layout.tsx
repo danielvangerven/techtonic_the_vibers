@@ -1,6 +1,4 @@
-// Owner: A (Frontend). Phone-frame wrapper around every screen.
-import PhoneFrame from "@/components/PhoneFrame";
-
+// Owner: A (Frontend). Pages draw their own phone-style card.
 export default function UiLayout({ children }: { children: React.ReactNode }) {
-  return <PhoneFrame>{children}</PhoneFrame>;
+  return <>{children}</>;
 }
