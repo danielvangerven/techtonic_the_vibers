@@ -33,9 +33,36 @@ export type PeerStats =
     }
   | { ok: false; reason: "too_few_people" };
 
+export interface SmartAlternative {
+  id: string;
+  title: string;
+  badge: string;
+  description: string;
+  peerAdoptionRate?: string;
+  estimatedSavings?: string;
+  action?: { label: string; target: string };
+}
+
+export interface KbcProductRecommendation {
+  productId: string;
+  name: string;
+  category: "insurance" | "banking" | "loans" | "investments" | "deals_mobility";
+  reason: string;
+  actionLabel: string;
+  priceOrRate?: string;
+  badge?: string;
+}
+
+export interface MomentRecommendations {
+  bestProduct?: KbcProductRecommendation;
+  secondaryProduct?: KbcProductRecommendation;
+  alternatives: SmartAlternative[];
+}
+
 export interface MomentView {
   moment: Moment;
   readiness: { done: number; total: number };
   checks: Check[];
   peers: PeerStats;
+  recommendations?: MomentRecommendations;
 }
