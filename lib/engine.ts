@@ -1,6 +1,7 @@
 import type { Moment, MomentView, Check } from "./types";
 import { getTemplate, Persona, Customer } from "./data";
 import { computePeerStats } from "./peers";
+import { computeRecommendations } from "./recommendations";
 
 export function buildMomentView(
   customer: Persona | Customer,
@@ -8,6 +9,7 @@ export function buildMomentView(
 ): MomentView {
   const template = getTemplate(moment.type);
   const { peers, forgotPcts } = computePeerStats(customer, moment);
+  const recommendations = computeRecommendations(customer, moment);
 
   const checks: Check[] = [];
   let doneCount = 0;
@@ -77,5 +79,6 @@ export function buildMomentView(
     readiness: { done: doneCount, total },
     checks,
     peers,
+    recommendations,
   };
 }
